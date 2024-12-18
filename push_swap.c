@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:04 by sscheini          #+#    #+#             */
-/*   Updated: 2024/12/18 22:01:35 by sscheini         ###   ########.fr       */
+/*   Updated: 2024/12/18 22:25:04 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,17 +61,20 @@ int	main(int argc, char **argv)
 {
 	t_list	**stack_a;
 	t_list	**stack_b;
-	int		i;
 
 	if (argc <= 2)
 		return (0);
 	stack_a = ft_stack_ini(argc, argv);
 	stack_b = (t_list **) malloc(sizeof(t_list *));
 	(*stack_b) = NULL;
+	ft_execute("pb", stack_a, stack_b);
+	ft_execute("pb", stack_a, stack_b);
 	ft_printf("A.\n");
 	ft_print_stack(stack_a);
 	ft_printf("B.\n");
 	ft_print_stack(stack_b);
 	ft_lstclear(stack_a, free);
 	ft_lstclear(stack_b, free);
+	free(stack_a);
+	free(stack_b);
 }

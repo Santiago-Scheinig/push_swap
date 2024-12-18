@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:18 by sscheini          #+#    #+#             */
-/*   Updated: 2024/12/18 22:00:23 by sscheini         ###   ########.fr       */
+/*   Updated: 2024/12/18 22:33:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,21 @@ static	int	ft_swap(t_list *stack)
 static	int ft_push(t_list	**stack_src, t_list **stack_des)
 {
 	t_list	*aux;
-	
+
 	if (!(*stack_src))
 		return (0);
 	aux = (*stack_src);
-	ft_lstadd_back(stack_des, (*stack_src));
-	(*stack_src) = (*stack_src)->next;
-	aux->next = NULL;
+	if (!(*stack_des))
+	{
+		(*stack_src) = (*stack_src)->next;
+		ft_lstadd_back(stack_des, aux);
+		aux->next = NULL;
+	}
+	else
+	{
+		(*stack_src) = (*stack_src)->next;
+		ft_lstadd_front(stack_des, aux);
+	}
 	return (1);
 }
 
@@ -43,9 +51,16 @@ static	int ft_push(t_list	**stack_src, t_list **stack_des)
 /* element it's last.														*/
 static	int	ft_rotate(t_list **stack)
 {
+	t_list	*aux;
+
 	if (!(*stack) || !(*stack)->next)
 		return (0);
-	ft_lstiter((*stack), ft_swap);
+	aux = (*stack);
+	while (aux)
+	{
+		ft_swap(aux);
+		aux = aux->next;
+	}
 	return (1);
 }
 
