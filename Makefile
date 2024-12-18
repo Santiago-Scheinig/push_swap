@@ -1,21 +1,22 @@
 #----------	Makefile Library -- All the following variables can be edited. ----------#
 
-SRC		=	$(SRCDIR)ft_printf.c 		\
-			$(SRCDIR)ft_printf_utils.c 	\
+SRC		=	$(SRCDIR)push.c 	\
+			$(SRCDIR)swap.c 	\
+			$(SRCDIR)rotate.c 	\
+			$(SRCDIR)push_swap.c 		\
+			$(SRCDIR)reverse_rotate.c 	\
+			$(SRCDIR)push_swap_utils.c 	\
 #
-BSRC	=	$(SRCDIR)ft_printf_bonus.c			\
-			$(SRCDIR)ft_printf_utils.c			\
-			$(SRCDIR)ft_printf_utils_bonus.c	\
-			$(SRCDIR)ft_printf_flags_bonus.c	\
-
+BSRC	=	
+#
 SRCDIR	=	./
 OBJDIR	=	obj/
 MAKENM	=	libft
 LIB		=	libft.a
-
-NAME	=	libftprintf.a
-BONUS	=	$(NAME)
-
+#
+NAME	=	push_swap
+BONUS	=	
+#
 CC		=	cc
 GCC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
@@ -45,14 +46,14 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 $(NAME): $(OBJDIR) $(OBJ)
 	@echo "\e[0;32m"
 	@cp libft/libft.a $(NAME)
-	@ar rcs $(NAME) $(OBJ)
+	@$(CC) $(CFLAGS) $(NAME) $(OBJ) $(LIB)
 	@echo "\e[0;32m $@ linked.\n"
 #
 #- Remove the second command line in case a no sub-makefile must be executed.		  -#
 bonus: $(LIB) $(OBJDIR) $(BOBJ)
 	@echo "\e[0;32m"
 	@cp libft/libft.a $(NAME)
-	@ar rcs $(NAME) $(BOBJ)
+	@$(CC) $(CFLAGS) $(NAME) $(BOBJ) $(LIB)
 	@echo "\e[0;32m Bonus $@ linked.\n"
 #
 #- Removes every object inside $(OBJDIR) and the directory itself.					  -#
