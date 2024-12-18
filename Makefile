@@ -1,10 +1,6 @@
 #----------	Makefile Library -- All the following variables can be edited. ----------#
 
-SRC		=	$(SRCDIR)push.c 	\
-			$(SRCDIR)swap.c 	\
-			$(SRCDIR)rotate.c 	\
-			$(SRCDIR)push_swap.c 		\
-			$(SRCDIR)reverse_rotate.c 	\
+SRC		=	$(SRCDIR)push_swap.c 		\
 			$(SRCDIR)push_swap_utils.c 	\
 #
 BSRC	=	
@@ -31,7 +27,8 @@ BOBJ	=	$(BSRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
 all: $(LIB) $(NAME)
 
 $(LIB):
-	@make -s -C $(MAKENM)
+	@echo "\e[0;32mBuilding libft.a in $(MAKENM)...\n"
+	@make bonus -s -C $(MAKENM)
 
 #- Creates a directory named $(OBJDIR).												  -#
 $(OBJDIR):
@@ -43,17 +40,17 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 	@echo "\e[0;35m -$@ created."
 #
 #- Remove the second command line in case a no sub-makefile must be executed.		  -#
-$(NAME): $(OBJDIR) $(OBJ)
+$(NAME): $(LIB) $(OBJDIR) $(OBJ)
 	@echo "\e[0;32m"
-	@cp libft/libft.a $(NAME)
-	@$(CC) $(CFLAGS) $(NAME) $(OBJ) $(LIB)
-	@echo "\e[0;32m $@ linked.\n"
+	@cp libft/libft.a $(NAME).a
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(NAME).a
+	@echo "\e[0;32m $@ program ready.\n"
 #
 #- Remove the second command line in case a no sub-makefile must be executed.		  -#
 bonus: $(LIB) $(OBJDIR) $(BOBJ)
 	@echo "\e[0;32m"
-	@cp libft/libft.a $(NAME)
-	@$(CC) $(CFLAGS) $(NAME) $(BOBJ) $(LIB)
+	@cp libft/libft.a $(NAME).a
+	@$(CC) $(CFLAGS) -o $(NAME) $(BOBJ) $(NAME).a
 	@echo "\e[0;32m Bonus $@ linked.\n"
 #
 #- Removes every object inside $(OBJDIR) and the directory itself.					  -#
@@ -65,6 +62,7 @@ clean:
 fclean: clean
 	@rm -f $(NAME)
 	@rm -f $(BONUS)
+	@rm -f $(NAME).a
 	@cd $(MAKENM) && make fclean
 	@echo "\e[0;32m Files removed."
 #
