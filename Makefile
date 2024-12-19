@@ -1,7 +1,9 @@
 #----------	Makefile Library -- All the following variables can be edited. ----------#
 
-SRC		=	$(SRCDIR)push_swap.c 		\
-			$(SRCDIR)push_swap_utils.c 	\
+SRC		=	$(SRCDIR)push_swap.c 				\
+			$(SRCDIR)push_swap_utils.c 			\
+			$(SRCDIR)push_swap_checks.c 		\
+			$(SRCDIR)push_swap_instructions.c	\
 #
 BSRC	=	
 #
