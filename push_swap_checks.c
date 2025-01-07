@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:04:06 by sscheini          #+#    #+#             */
-/*   Updated: 2024/12/19 16:48:55 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/07 18:43:09 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,6 @@ static	void	*ft_memfree(char **argf)
 		free(argf[i]);
 	free(argf);
 	return (NULL);
-}
-
-/* I like this as libft function. If it works...*/
-static	char	*ft_argjoin(char **argv)
-{
-	char	*str;
-	char	*aux;
-	int		i;
-
-	i = 0;
-	str = NULL;
-	while (argv[++i])
-	{
-		if (!str)
-			str = ft_strdup(argv[i]);
-		else
-		{
-			aux = str;
-			str = ft_strjoin(str, " ");
-			free(aux);
-			aux = str;
-			str = ft_strjoin(str, argv[i]);
-			free(aux);
-		}
-	}
-	return (str);
 }
 
 static	int ft_number_check(char *str)
@@ -110,6 +84,7 @@ static	int	ft_maxint_check(char **argf, int **ptr)
 	return (count);
 }
 
+/* Ft_stack_check*/
 int	*ft_stack_check(char **argv, int *ptr_len)
 {
 	char	**argf;

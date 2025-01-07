@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:18 by sscheini          #+#    #+#             */
-/*   Updated: 2024/12/19 15:55:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/07 17:50:28 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,9 @@ static	int	ft_rotate(t_list **stack)
 	if (!(*stack) || !(*stack)->next)
 		return (0);
 	aux = (*stack);
-	while (aux)
-	{
-		ft_swap(aux);
-		aux = aux->next;
-	}
+	(*stack) = (*stack)->next;
+	ft_lstadd_back(stack, aux);
+	aux->next = NULL;
 	return (1);
 }
 
@@ -90,8 +88,6 @@ int	ft_execute(const char *instruction, t_list **stack_a, t_list **stack_b)
 {
 	int	ans;
 
-	if (!stack_a || !stack_b)
-		return (0);
 	ans = 0;
 	if (!ft_strncmp(instruction, "sa", 3))
 		ans = ft_swap((*stack_a));
@@ -110,6 +106,6 @@ int	ft_execute(const char *instruction, t_list **stack_a, t_list **stack_b)
 	else if (!ft_strncmp(instruction, "rrb", 4))
 		ans = ft_reverse_rotate(stack_b);
 	if (!ans)
-		return (0);
+		return (-1);
 	return	(ft_printf("%s\n", instruction));
 }

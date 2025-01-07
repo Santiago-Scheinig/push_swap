@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:04 by sscheini          #+#    #+#             */
-/*   Updated: 2024/12/19 16:34:33 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/07 20:44:44 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static	t_list	**ft_stack_ini(char **argv, int **ptr)
  	return (stack);
 }
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv) 
 {
 	t_list	**stack_a;
 	t_list	**stack_b;
@@ -88,5 +88,5 @@ int	main(int argc, char **argv)
 	ft_print_stack(stack_a);
 	ft_printf("B.\n");
 	ft_print_stack(stack_b);
-	ft_forcend(ptr, stack_a, stack_b);
+	//ft_forcend(ptr, stack_a, stack_b);
 }
