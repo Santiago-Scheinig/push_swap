@@ -6,13 +6,13 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/07 20:44:44 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:28:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static	void	ft_forcend(int *ptr, t_list **stack_a, t_list **stack_b)
+static	void	ft_forcend(int *ptr, t_list **stacks)
 {
 	t_list *aux;
 	
@@ -20,30 +20,29 @@ static	void	ft_forcend(int *ptr, t_list **stack_a, t_list **stack_b)
 	{
 		free(ptr);
 		ptr = NULL;
-		aux = (*stack_a);
-		while (aux)
-		{
-			aux->content = NULL;
-			aux = aux->next;
-		}
-		aux = (*stack_b);
+		aux = stacks[0];
 		while (aux)
 		{
 			aux->content = NULL;
 			aux = aux->next;
 		}
 	}
-	if (stack_a)
-		ft_lstclear(stack_a, free);
-	if (stack_b)
-		ft_lstclear(stack_b, free);
-	free(stack_a);
-	free(stack_b);
+	if (stacks)
+	{
+		ft_lstclear(stacks, free);
+		free(stacks);
+	}
 }
+
+/* static	int	ft_solve()
+{
+	
+} */
 
 static	t_list	**ft_stack_ini(char **argv, int **ptr)
 {
 	t_list	**stack;
+	t_list	*aux;
 	int		ptr_len;
 	int		i;
 	
@@ -53,40 +52,38 @@ static	t_list	**ft_stack_ini(char **argv, int **ptr)
 		write(2, "Error\n", 6);
 		return (NULL);
 	}
-	stack = (t_list **) malloc(sizeof(t_list *));
+	stack = (t_list **) malloc(2 * sizeof(t_list *));
 	if (!stack)
 		return (NULL);
-	(*stack) = NULL;
+	stack[0] = NULL;
+	stack[1] = NULL;
 	i = 0;
 	while (++i < ptr_len + 1)
-		ft_lstadd_back(stack, ft_lstnew(&(*ptr)[i - 1]));
- 	return (stack);
+	{
+		aux = ft_lstnew(&(*ptr)[i - 1]);
+		if (!aux)
+			return (NULL);
+		ft_lstadd_back(&stack[0], aux);
+	}
+	return (stack);
 }
 
 int	main(int argc, char **argv) 
 {
-	t_list	**stack_a;
-	t_list	**stack_b;
+	t_list	**stacks;
 	int		*ptr;
 
 	if (argc < 2)
 		return (-1);
-	stack_a = ft_stack_ini(argv, &ptr);
-	if (!stack_a)
+	stacks = ft_stack_ini(argv, &ptr);
+	if (!stacks)
 	{
-		ft_forcend(ptr, NULL, NULL);
+		ft_forcend(ptr, stacks);
 		return(-1);
 	}
-	stack_b = (t_list **) malloc(sizeof(t_list *));
-	if (!stack_b)
-	{
-		ft_forcend(ptr, stack_a, NULL);
-		return(-1);
-	}
-	(*stack_b) = NULL;
 	ft_printf("A.\n");
-	ft_print_stack(stack_a);
+	ft_print_stack(&stacks[0]);
 	ft_printf("B.\n");
-	ft_print_stack(stack_b);
-	//ft_forcend(ptr, stack_a, stack_b);
-}
+	ft_print_stack(&stacks[1]);
+	ft_forcend(ptr, stacks);
+ }

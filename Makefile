@@ -30,7 +30,7 @@ all: $(LIB) $(NAME)
 
 $(LIB):
 	@echo "\e[0;32mBuilding libft.a in $(MAKENM)...\n"
-	@make bonus -s -C $(MAKENM)
+	@make -s -C $(MAKENM)
 
 #- Creates a directory named $(OBJDIR).												  -#
 $(OBJDIR):

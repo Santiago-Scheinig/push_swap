@@ -6,12 +6,13 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:04:06 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/07 18:43:09 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/08 14:21:44 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+/* Frees an array of strings. Then, returns NULL.							*/
 static	void	*ft_memfree(char **argf)
 {
 	int	i;
@@ -23,6 +24,10 @@ static	void	*ft_memfree(char **argf)
 	return (NULL);
 }
 
+/* Verifies that every value in a string are numeric characters, signs		*/
+/* and/or spaces.															*/
+/* - Notice that, if a sign exists, the following must be a number.			*/
+/* - Returns 0 if false, and 1 if true.										*/
 static	int ft_number_check(char *str)
 {
 	int	i;
@@ -46,6 +51,9 @@ static	int ft_number_check(char *str)
 	return (1);
 }
 
+/* Verifies that every value in an array of numeric string, are unique		*/
+/* and do not repeat themselves.											*/
+/* - Returns 0 if they repeat, 1 if they not.								*/
 static	int	ft_double_check(char **argf)
 {
 	int	i;
@@ -62,6 +70,10 @@ static	int	ft_double_check(char **argf)
 	return (1);
 }
 
+/* Verifies that every value in an array of numeric strings, are between	*/
+/* the MAX_INT and MIN_int. (including them)								*/
+/* - If all the values are valid, returns an INT * including them. If not	*/
+/*   returns 0.																*/
 static	int	ft_maxint_check(char **argf, int **ptr)
 {
 	long	check_nbr;
@@ -84,7 +96,12 @@ static	int	ft_maxint_check(char **argf, int **ptr)
 	return (count);
 }
 
-/* Ft_stack_check*/
+/* Verifies that the inputed values recieved as argument follow the next	*/
+/* requisites:																*/
+/* - Values inputed are numbers.											*/
+/* - Numbers inputed are betweeen the MAX_INT and MIN_INT (including them).	*/
+/* - Numbers inputed are unique and do not repeat.							*/
+/* If all the requisites are true, returns an INT * with all the values.	*/
 int	*ft_stack_check(char **argv, int *ptr_len)
 {
 	char	**argf;
