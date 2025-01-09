@@ -6,23 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:04:06 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/08 14:21:44 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/09 20:48:44 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-/* Frees an array of strings. Then, returns NULL.							*/
-static	void	*ft_memfree(char **argf)
-{
-	int	i;
-
-	i = -1;
-	while (argf[++i])
-		free(argf[i]);
-	free(argf);
-	return (NULL);
-}
 
 /* Verifies that every value in a string are numeric characters, signs		*/
 /* and/or spaces.															*/
@@ -83,13 +71,16 @@ static	int	ft_maxint_check(char **argf, int **ptr)
 	count = 0;
 	while (argf[count])
 		count++;
-	(*ptr) = calloc(count, sizeof(int));
+	(*ptr) = malloc(count * sizeof(int));
 	i = -1;
 	while (argf[++i])
 	{
 		check_nbr = ft_atol(argf[i]);
 		if (check_nbr < INT_MIN || check_nbr > INT_MAX)
+		{
+			free((*ptr));
 			return (0);
+		}
 		else
 			(*ptr)[i] = (int) check_nbr;
 	}
@@ -112,21 +103,21 @@ int	*ft_stack_check(char **argv, int *ptr_len)
 	i = 0;
 	str = ft_argjoin(argv);
 	if (!str)
-		return (0);
+		return (NULL);
 	if (!ft_number_check(str))
 	{
 			free(str);
-			return (0);
+			return (NULL);
 	}
 	argf = ft_split(str, ' ');
 	free(str);
 	if (!argf)
 		return (NULL);
 	if (!ft_double_check(argf))
-		return (ft_memfree(argf));
+		return (ft_split_free(argf));
 	(*ptr_len) = ft_maxint_check(argf, &ptr);
 	if (!(*ptr_len))
-		return (ft_memfree(argf));
-	ft_memfree(argf);
+		return (ft_split_free(argf));
+	ft_split_free(argf);
 	return (ptr);
 }

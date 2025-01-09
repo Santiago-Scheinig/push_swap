@@ -4,6 +4,7 @@ SRC		=	$(SRCDIR)push_swap.c 				\
 			$(SRCDIR)push_swap_utils.c 			\
 			$(SRCDIR)push_swap_checks.c 		\
 			$(SRCDIR)push_swap_instructions.c	\
+			$(SRCDIR)push_swap_troubleshoot.c	\
 #
 BSRC	=	
 #
