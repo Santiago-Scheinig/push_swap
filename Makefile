@@ -3,6 +3,7 @@
 SRC		=	$(SRCDIR)push_swap.c 				\
 			$(SRCDIR)push_swap_utils.c 			\
 			$(SRCDIR)push_swap_checks.c 		\
+			$(SRCDIR)push_swap_sort_algorithms.c\
 			$(SRCDIR)push_swap_instructions.c	\
 			$(SRCDIR)push_swap_troubleshoot.c	\
 #
@@ -16,9 +17,8 @@ LIB		=	libft.a
 NAME	=	push_swap
 BONUS	=	
 #
-CC		=	cc
-GCC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror
+CC		=	gcc
+CFLAGS	=	-Wall -Wextra -Werror -g
 
 #---------- Edit the following if: IGLAGS added or no sub-makefile needed. ----------
 

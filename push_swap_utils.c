@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/09 20:34:31 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/09 23:01:56 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,25 @@ void	ft_print_stack(t_list **stacks)
 	ft_prints(&stacks[0]);
 	ft_printf("B.\n");
 	ft_prints(&stacks[1]);
+}
+
+int	ft_check_sort(t_list *stacks)
+{
+	int	*nbr_i;
+	int	*nbr_j;
+
+	if (!stacks)
+		return (0);
+	while (stacks)
+	{
+		nbr_i = stacks->content;
+		if (stacks->next)
+			nbr_j = stacks->next->content;
+		if ((*nbr_i) > (*nbr_j))
+			return (0);
+		stacks = stacks->next;
+	}
+	return (1);
 }
 
 /* Executes a given instruction and prints it on stdout.					*/

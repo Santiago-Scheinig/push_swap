@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:04:06 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/09 20:48:44 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/09 23:01:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,7 @@ int	*ft_stack_check(char **argv, int *ptr_len)
 	char	**argf;
 	char	*str;
 	int		*ptr;
-	int		i;
 
-	i = 0;
 	str = ft_argjoin(argv);
 	if (!str)
 		return (NULL);
