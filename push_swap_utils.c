@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/09 23:01:56 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/16 18:44:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,32 @@ void	ft_print_stack(t_list **stacks)
 	ft_prints(&stacks[1]);
 }
 
+int	ft_pvtchr(t_list *stack, int stack_len)
+{
+	int	tmp;
+	int	count;
+	
+	tmp = (*(stack->content));
+	count = 0;
+	while (stack || count == stack_len)
+	{
+		stack = stack->next;
+		if ((*tmp) < (*(stack->content)))
+		{
+			tmp = (*(stack->content));
+			count++;
+		}	
+	}
+	return (tmp);
+}
+
 int	ft_check_sort(t_list *stacks)
 {
 	int	*nbr_i;
 	int	*nbr_j;
 
 	if (!stacks)
-		return (0);
+		return (1);
 	while (stacks)
 	{
 		nbr_i = stacks->content;
