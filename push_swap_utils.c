@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/16 18:44:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/24 16:28:38 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,38 +38,55 @@ void	ft_print_stack(t_list **stacks)
 	ft_prints(&stacks[1]);
 }
 
-int	ft_pvtchr(t_list *stack, int stack_len)
+int	ft_get_maxint(t_list *stack)
 {
-	int	tmp;
-	int	count;
+	int tmp;
 	
 	tmp = (*(stack->content));
-	count = 0;
-	while (stack || count == stack_len)
+	stack = stack->next;
+	while (stack)
 	{
-		stack = stack->next;
-		if ((*tmp) < (*(stack->content)))
-		{
+		if (tmp < (*(stack->content)))
 			tmp = (*(stack->content));
-			count++;
-		}	
+		stack = stack->next;
 	}
 	return (tmp);
 }
 
+int	ft_pvtchr(t_list *stack)
+{
+	t_list	*tmp;
+	int		nbr_i;
+	int		count;
+	int		stack_len;
+
+	stack_len = ft_lstsize(stack);
+	nbr_i = (*(stack->content));
+	tmp = stack->next;
+	while (tmp)
+	{
+		if (nbr_i < (*(tmp->content)))
+			count++;
+		tmp = tmp->next;
+	}
+	if (count == stack_len / 2)
+		return (nbr_i);
+	return (ft_pvtchr(stack->next))
+}
+
 int	ft_check_sort(t_list *stacks)
 {
-	int	*nbr_i;
-	int	*nbr_j;
+	int	nbr_i;
+	int	nbr_j;
 
-	if (!stacks)
+	if (!stacks || ft_lstsize(stacks) == 1)
 		return (1);
 	while (stacks)
 	{
-		nbr_i = stacks->content;
+		nbr_i = (*(stacks->content));
 		if (stacks->next)
-			nbr_j = stacks->next->content;
-		if ((*nbr_i) > (*nbr_j))
+			nbr_j = (*(stacks->next->content));
+		if (nbr_i > nbr_j)
 			return (0);
 		stacks = stacks->next;
 	}

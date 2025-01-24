@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:33:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/16 21:29:05 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/24 15:51:52 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@
 /*	  non-relevant digit.														*/
 
 /*									   {P, S,       R, RR}						*/
-/* Every order for stack_a is saved on {0 (pa), 2 (sa) , 4 (ra), 6 (rra)} (even numbers).		*/
-/* Every order for stack_b is saved on {1 (pb), 3 (rrb), 5 (sb), 7 (rb) } (odd numbers).			*/
+/* Every order for stack_a is saved on {0 (pa), 2 (sa) , 4 (ra), 6 (rrb)} (even numbers).		*/
+/* Every order for stack_b is saved on {1 (pb), 3 (rra), 5 (sb), 7 (rb) } (odd numbers).			*/
 /* The formula being:														*/
 /* Instruction index = column + (2 * pair).								*/
 /* ____________________________________________________________				*/
@@ -75,7 +75,67 @@
 /* |________|___________|___________|___________|_____________|				*/
 /*																			*/
 
-int	ft_quicksort(t_list **stacks, t_list **lst_orders) //after each iteration, bubble sort;
+static	int	ft_inverse_bubblesort(t_list *stack)
+{
+	int	nbr_i;
+	int	nbr_j;
+	int	nbr_l;
+
+	nbr_i = (*(stack->content));
+	nbr_j = (*(stack->next->content));
+	nbr_l = (*(ft_lstlast(stack)->content));
+	if (nbr_i < nbr_j)
+	{
+		if (nbr_l != nbr_j)
+			if (nbr_i < nbr_l)
+				return (7);//rb
+	}
+	else
+		if (nbr_l != nbr_j)
+			if (nbr_i < nbr_l)
+				return (6);//rrb
+	return (5);//sb
+}
+
+int ft_bubblesort(t_list *stack, int column)
+{
+	int	nbr_i;
+	int	nbr_j;
+	int	nbr_l;
+
+	if (column)
+		return (ft_inverse_bubblesort(stack));
+	nbr_i = (*(stack->content));
+	nbr_j = (*(stack->next->content));
+	nbr_l = (*(ft_lstlast(stack)->content));
+	if (nbr_i > nbr_j)
+	{
+		if (nbr_l != nbr_j)
+			if (nbr_i > nbr_l)
+				return (4);//ra
+	}
+	else
+		if (nbr_l != nbr_j)
+			if (nbr_i > nbr_l)
+				return (3);//rra
+	return (2);//sa
+}
+
+int	ft_quicksort(t_list	*stack, int column, int pivot)
+{
+	if (!column)
+	{
+		if ((*(stack->content)) < pivot)
+			return (1);
+		else if ((*(stack->content)) > pivot)
+			return (ft_bubblesort(stack, column));
+	}
+	if ((*(stack->content)) > pivot)
+		return (7);
+	return (ft_bubblesort(stack, column));
+}
+
+/* int	ft_quicksort(t_list **stacks, t_list **lst_orders) //after each iteration, bubble sort;
 {
 	int	lst_len;
 	int	count;
@@ -113,4 +173,4 @@ int	ft_insertionsort(t_list **stacks)
 		if (stack_len > 3)
 			ft_
 	}
-}
+} */
