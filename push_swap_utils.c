@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/24 16:28:38 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/28 16:54:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static	void	ft_prints(t_list **stack)
 	int		*ptr;
 	int		ans;
 
-	if (!stack || !(*stack))
+	if (!stack)
 		return ;
 	ans = 0;
 	aux = (*stack);
@@ -32,65 +32,88 @@ static	void	ft_prints(t_list **stack)
 
 void	ft_print_stack(t_list **stacks)
 {
+	if (!stacks)
+		return ;
 	ft_printf("A.\n");
 	ft_prints(&stacks[0]);
 	ft_printf("B.\n");
 	ft_prints(&stacks[1]);
 }
 
-int	ft_get_maxint(t_list *stack)
+/* Returns the next T_LIST *, of integers content, with a lesser or higher	*/
+/* value than the head of it.												*/
+/* - Use a possitive value as sign argument if looking for higher, negative	*/
+/* if looking for lesser.													*/
+static	t_list	*ft_lstnext_minmax(t_list *stack, int sign)
 {
-	int tmp;
-	
-	tmp = (*(stack->content));
-	stack = stack->next;
+	int	nbr;
+
+	nbr = (*(stack->content));
 	while (stack)
 	{
-		if (tmp < (*(stack->content)))
-			tmp = (*(stack->content));
+		if (sign > 0)
+			if (nbr < (*(stack->content)))
+				return (stack);
+		if (sign < 0)
+			if (nbr > (*(stack->content)))
+				return (stack);
 		stack = stack->next;
 	}
-	return (tmp);
+	return (NULL);
 }
 
-int	ft_pvtchr(t_list *stack)
+/* Returns the middle pivot of an unsorted T_LIST *, of integers content,	*/
+/* with a complexity of O(n).												*/
+int	ft_pvtchr(t_list *stack, t_list *pivot)
 {
 	t_list	*tmp;
-	int		nbr_i;
-	int		count;
-	int		stack_len;
+	int		top;
+	int		bottom;
 
-	stack_len = ft_lstsize(stack);
-	nbr_i = (*(stack->content));
-	tmp = stack->next;
+	if (!stack || !(*(stack->content)))
+		return (0);
+	top = 0;
+	bottom = 0;
+	tmp = stack;
 	while (tmp)
 	{
-		if (nbr_i < (*(tmp->content)))
-			count++;
+		if ((*(pivot->content)) < (*(tmp->content)))
+			top++;
+		else if ((*(pivot->content)) > (*(tmp->content)))
+			bottom++;
 		tmp = tmp->next;
 	}
-	if (count == stack_len / 2)
-		return (nbr_i);
-	return (ft_pvtchr(stack->next))
+	if (top == bottom || top - 1 == bottom)
+		return ((*(pivot->content)));
+	else if (bottom > top)
+		return (ft_pvtchr(stack, ft_lstnext_minmax(pivot, -1)));
+	return (ft_pvtchr(stack, ft_lstnext_minmax(pivot, 1)));
 }
 
-int	ft_check_sort(t_list *stacks)
+/* Checks if a T_LIST *, of integers content, is sorted.					*/
+/* - Returns 0 if false. 1 if true.											*/
+/* - Notice that an empty list is a sorted one.								*/
+int	ft_check_sort(t_list *stacks, int column)
 {
 	int	nbr_i;
 	int	nbr_j;
-
+	int	ans;
+	
+	ans = 0;
 	if (!stacks || ft_lstsize(stacks) == 1)
-		return (1);
+		return (ans);
 	while (stacks)
 	{
 		nbr_i = (*(stacks->content));
 		if (stacks->next)
 			nbr_j = (*(stacks->next->content));
-		if (nbr_i > nbr_j)
-			return (0);
+		if (!column && nbr_i > nbr_j)
+			ans++;
+		if (column && nbr_i < nbr_j)
+			ans++;
 		stacks = stacks->next;
 	}
-	return (1);
+	return (ans);
 }
 
 /* Executes a given instruction and prints it on stdout.					*/

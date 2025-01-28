@@ -6,25 +6,47 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/24 16:15:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:19:09 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static	int	ft_solve_stack(t_list *stack, int column)
+static	void	ft_merge_stacks(t_list **stacks, char	**lst_instructions)
+{
+	int	order;
+	int	loop;
+	
+	loop = 0;
+	while (stacks[1] && loop < 10)
+	{
+		ft_print_stack(stacks);
+		order = ft_insertionsort(stacks, 0);
+		if (ft_execute(lst_instructions[order], stacks))
+			ft_printf("%s\n", lst_instructions[order]);
+		loop++;
+	}
+	while (ft_check_sort(stacks[0], 0) && loop < 20)
+	{
+		ft_print_stack(stacks);
+		if (ft_execute(lst_instructions[4], stacks))
+			ft_printf("%s\n", lst_instructions[4]);
+		loop++;
+	}
+}
+static	int	ft_solve_stack(t_list **stacks, int column, int *pivot)
 {
 	int	stack_len;
 	int	order;
 	
 	order = 0;
-	stack_len = ft_lstsize(stack);
-	if (!stack_len)
+	stack_len = ft_lstsize(stacks[column]);
+	if (!stack_len || !ft_check_sort(stacks[column], column))
 		return (0);
 	if (1 < stack_len && stack_len <= 3)
-		order = ft_bubblesort(stack, column);
-	if (3 < stack_len && stack_len <= 7)
-		order = ft_quicksort(stack, column);
+		order = ft_bubblesort(stacks[column], column);
+	else
+		order = ft_quicksort(stacks, column, pivot);
 	/*if (lst_size > 5)
 		ft_raditzsort();*/
 	return (order);
@@ -35,14 +57,23 @@ static	void	ft_solve(t_list **stacks, char	**lst_instructions)
 	int	pivot;
 	int	order_a;
 	int	order_b;
+	int	loop;
 
-	pivot = ft_pvtchr(stack[0], ft_get_maxint(stack[0]));
-	while (!ft_check_sort(stacks[0]) || !ft_check_sort(stacks[1]))
+	loop = 0;
+	if (ft_lstsize(stacks[0]) > 3)
+		pivot = ft_pvtchr(stacks[0], stacks[0]);
+	else
+		pivot = 0;
+	ft_printf("pivot : |%i|\n", pivot);	
+	while (((ft_check_sort(stacks[0], 0) || ft_check_sort(stacks[1], 1))) && loop < 30)
 	{
-		order_a = ft_solve_stack(stacks[0], 0);
-		order_b = ft_solve_stack(stacks[1], 1);
+		order_a = ft_solve_stack(stacks, 0, &pivot);
+		order_b = ft_solve_stack(stacks, 1, &pivot);
 		if (order_a == order_b - 3)
+		{
 			ft_execute(lst_instructions[order_b + 3], stacks);
+			ft_printf("%s\n", lst_instructions[order_b + 3]);
+		}
 		else
 		{
 			if (order_a != 0)
@@ -51,17 +82,14 @@ static	void	ft_solve(t_list **stacks, char	**lst_instructions)
 			if (order_b != 0)
 				if (ft_execute(lst_instructions[order_b], stacks))
 					ft_printf("%s\n", lst_instructions[order_b]);
-/* 			else if (ft_insertionsort(stacks) > 0)
-				ft_execute(lst_instructions[6]);
-			else if (ft_insertionsort(stacks) < 0)
-				ft_execute(lst_instructions[7]);*/
 		}
+		loop++;
 	}
-	while (stacks[1])
-		if (ft_execute(lst_instructions[0], stacks))
-			ft_printf("%s\n", lst_instructions[0]);	
 }
 
+/* Verifies the proper format of the inputed values; If values are valid,	*/
+/* it initializes the stack of numbers as T_LIST ** array. 					*/
+/* - Returns NULL in case of error or non valid values.						*/
 static	t_list	**ft_stack_ini(char **argv, int **ptr)
 {
 	t_list	**stack;
@@ -88,6 +116,9 @@ static	t_list	**ft_stack_ini(char **argv, int **ptr)
 	return (stack);
 }
 
+/* Push_swap is a program dedicated to sort an array of integers numbers	*/
+/* without duplicates, using only two stacks and limited movement 			*/
+/* instructions, giving a O(n^2) deterministic solution.					*/
 int	main(int argc, char **argv) 
 {
 	t_list	**stacks;
@@ -100,8 +131,8 @@ int	main(int argc, char **argv)
 	lst_instructions = ft_split("pa pb sa rra ra sb rrb rb ss rrr rr", ' ');
 	if (!stacks || !lst_instructions)
 		return (ft_forcend(ptr, stacks, lst_instructions));
-	ft_print_stack(stacks);
 	ft_solve(stacks, lst_instructions);
+	ft_merge_stacks(stacks, lst_instructions);
 	ft_print_stack(stacks);
 	ft_stack_free(ptr, stacks);
 	ft_split_free(lst_instructions);

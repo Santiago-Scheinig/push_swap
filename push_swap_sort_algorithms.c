@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:33:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/24 15:51:52 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:45:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,102 +75,101 @@
 /* |________|___________|___________|___________|_____________|				*/
 /*																			*/
 
+/* Sorts from maximum to minimum, with a O(n^n) deterministic solution.		*/
 static	int	ft_inverse_bubblesort(t_list *stack)
 {
 	int	nbr_i;
 	int	nbr_j;
 	int	nbr_l;
+	int	lst_len;
 
 	nbr_i = (*(stack->content));
 	nbr_j = (*(stack->next->content));
 	nbr_l = (*(ft_lstlast(stack)->content));
-	if (nbr_i < nbr_j)
+	lst_len = ft_lstsize(stack);
+	if (nbr_i < nbr_j && lst_len <= 3)
 	{
 		if (nbr_l != nbr_j)
 			if (nbr_i < nbr_l)
 				return (7);//rb
 	}
-	else
+	else if (lst_len <= 3)
 		if (nbr_l != nbr_j)
 			if (nbr_i < nbr_l)
 				return (6);//rrb
+	if (nbr_i > nbr_j && ft_lstsize(stack) > 3)
+		return (7);
 	return (5);//sb
 }
 
+/* Sorts from minimum to maximum, with a O(n^n) deterministic solution.		*/
 int ft_bubblesort(t_list *stack, int column)
 {
 	int	nbr_i;
 	int	nbr_j;
 	int	nbr_l;
+	int	lst_len;
 
 	if (column)
 		return (ft_inverse_bubblesort(stack));
 	nbr_i = (*(stack->content));
 	nbr_j = (*(stack->next->content));
 	nbr_l = (*(ft_lstlast(stack)->content));
-	if (nbr_i > nbr_j)
+	lst_len = ft_lstsize(stack);
+	if (nbr_i > nbr_j && lst_len <= 3)
 	{
 		if (nbr_l != nbr_j)
 			if (nbr_i > nbr_l)
 				return (4);//ra
 	}
-	else
+	else if (lst_len <= 3)
 		if (nbr_l != nbr_j)
 			if (nbr_i > nbr_l)
 				return (3);//rra
+	if (nbr_i < nbr_j)
+		return (4);
 	return (2);//sa
 }
 
-int	ft_quicksort(t_list	*stack, int column, int pivot)
+/* Splits the stack with a middle pivot. */
+int	ft_quicksort(t_list	**stacks, int column, int *pivot)
 {
 	if (!column)
 	{
-		if ((*(stack->content)) < pivot)
-			return (1);
-		else if ((*(stack->content)) > pivot)
-			return (ft_bubblesort(stack, column));
+		if (ft_lstsize(stacks[0]) == 4 && ft_lstsize(stacks[1]) > 1)
+				if ((*(stacks[0]->content)) == (*pivot))
+					return (1);//ft_insertionsort();
+		if ((*(stacks[0]->content)) < (*pivot))
+			return (1);//ft_insertionsort();
+		else
+			return (4);
 	}
-	if ((*(stack->content)) > pivot)
-		return (7);
-	return (ft_bubblesort(stack, column));
+	return (0);
 }
 
-/* int	ft_quicksort(t_list **stacks, t_list **lst_orders) //after each iteration, bubble sort;
+int	ft_insertionsort(t_list **stacks, int column)
 {
-	int	lst_len;
+	t_list *tmp;
 	int	count;
-	int	pivot;
+	int	stack_len;
 
-	lst_len = ft_lstsize(stacks[0]);
-	pivot = ft_pvtchr(stacks[0], lst_len / 2);
-	count = 0;
-	while ((lst_len - count) > 3 || (ft_lstsize(stacks[1]) < (lst_len / 2)))
+	if (!column)
 	{
-		if ((*(stack->content)) == pivot)
-			ft_execute(lst_orders[2], stacks);
-		else if ((*(stack->content)) < pivot)
+		count = 0;
+		tmp = stacks[0];
+		stack_len = ft_lstsize(stacks[0]);
+		if ((*(stacks[1]->content)) < (*(stacks[0]->content)))
+			if ((*(stacks[1]->content)) > ((*(ft_lstlast(stacks[0])->content))))
+				return (0);
+		while ((*(stacks[1]->content)) > (*(tmp->content)))
 		{
 			count++;
-			ft_execute(lst_orders[1], stacks);
-			while (!ft_check_sort(stacks[1]) && (ft_lstsize(stacks[1]) < 4))
-				ft_execute(lst_orders[ft_bubblesort(stack[1], 1)], stacks);
+			tmp = tmp->next;
 		}
-		else
-			ft_execute(lst_orders[4], stacks);
+		ft_printf("|ANS - %i|", count);
+		if (count > (stack_len / 2))
+			return (3);
+		return (4);
 	}
+	return (0);
 }
-
-int	ft_insertionsort(t_list **stacks)
-{
-	int	stack_len;
-	
-	stack_len = ft_lstsize(stacks[0]);
-	while (!ft_check_sort(stacks[0]) || stack_len-- <= 3)
-		ft_execute("pb", stacks);
-	while (!ft_check_sort(stacks[1]))
-	{
-		stack_len = ft_lstsize(stacks[1]);
-		if (stack_len > 3)
-			ft_
-	}
-} */
