@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap_sort_algorithms.c                        :+:      :+:    :+:   */
+/*   push_swap_quicksort.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:33:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/29 15:58:08 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/29 20:43:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,60 +75,79 @@
 /* |________|___________|___________|___________|_____________|				*/
 /*																			*/
 
-/* Sorts from maximum to minimum, with a O(n^n) deterministic solution.		*/
-static	int	ft_inverse_bubblesort(t_list *stack)
+static	int	ft_inverse_getposition(int nbr, t_list *stack)
 {
-	int	nbr_i;
-	int	nbr_j;
-	int	nbr_l;
-	int	lst_len;
+	t_list *tmp;
+	int		count;
+	int		stack_len;
 
-	nbr_i = (*(stack->content));
-	nbr_j = (*(stack->next->content));
-	nbr_l = (*(ft_lstlast(stack)->content));
-	lst_len = ft_lstsize(stack);
-	if (nbr_i < nbr_j && lst_len <= 3)
+	if (!stack)
+		return (1);
+	count = 0;
+	tmp = ft_lstlast(stack);
+	stack_len = ft_lstsize(stack);
+	while (stack && (nbr > (*(stack->content)) || nbr < (*(tmp->content))))
 	{
-		if (nbr_l != nbr_j)
-			if (nbr_i < nbr_l)
-				return (7);//rb
+		count++;
+		tmp = stack;
+		stack = stack->next;
 	}
-	else if (lst_len <= 3)
-		if (nbr_l != nbr_j)
-			if (nbr_i < nbr_l)
-				return (6);//rrb
-	if (nbr_i > nbr_j && ft_lstsize(stack) > 3)
-		return (7);
-	return (5);//sb
+	if (!count)
+		return (0);
+	if (count > (stack_len / 2))
+		return (-1);
+	return (1);
 }
 
-/* Sorts from minimum to maximum, with a O(n^n) deterministic solution.		*/
-int ft_bubblesort(t_list *stack, int column)
+static	int	ft_getposition(int nbr, t_list *stack, int column)
 {
-	int	nbr_i;
-	int	nbr_j;
-	int	nbr_l;
-	int	lst_len;
+	t_list *tmp;
+	int		count;
+	int		stack_len;
 
-	if (column)
-		return (ft_inverse_bubblesort(stack));
-	nbr_i = (*(stack->content));
-	nbr_j = (*(stack->next->content));
-	nbr_l = (*(ft_lstlast(stack)->content));
-	lst_len = ft_lstsize(stack);
-	if (nbr_i > nbr_j && lst_len <= 3)
+	if (!stack)
+		return (1);
+	count = 0;
+	tmp = ft_lstlast(stack);
+	stack_len = ft_lstsize(stack);
+	if (!column)
 	{
-		if (nbr_l != nbr_j)
-			if (nbr_i > nbr_l)
-				return (4);//ra
+		while (stack && (nbr > (*(stack->content)) || nbr < (*(tmp->content))))
+		{
+			count++;
+			tmp = stack;
+			stack = stack->next;
+		}
 	}
-	else if (lst_len <= 3)
-		if (nbr_l != nbr_j)
-			if (nbr_i > nbr_l)
-				return (3);//rra
-	if (nbr_i < nbr_j)
-		return (4);
-	return (2);//sa
+	else
+		return (ft_inverse_getposition(nbr, stack));
+	if (!count)
+		return (0);
+	if (count > (stack_len / 2))
+		return (-1);
+	return (1);
+}
+
+int	ft_insertionsort(t_list **stacks, int column)
+{
+	int	ans;
+
+	if (!column)
+	{
+		ans = ft_getposition((*(stacks[0]->content)), stacks[1], 1);
+		if (!ans || (!ft_check_sort(stacks[1], 1) && (*(stacks[0]->content)) > (*(stacks[1]->content))) || ft_lstsize(stacks[1]) <= 2)
+			return (1);
+		if (ans > 0)
+			return (7);//rb
+		return (6);//rrb
+	}
+	else
+		ans = ft_getposition((*(stacks[1]->content)), stacks[0], 0);
+	if (!ans)
+		return (0);
+	if (ans > 0)
+		return (4);//ra
+	return (3);//rra
 }
 
 /* Splits the stack with a middle pivot. */
@@ -136,15 +155,21 @@ int	ft_quicksort(t_list	**stacks, int column, int *pivot)
 {
 	if (!column)
 	{
-		if (ft_lstsize(stacks[0]) == 4 && ft_lstsize(stacks[1]) > 1)
-				if ((*(stacks[0]->content)) == (*pivot))
-					return (1);//ft_insertionsort();
+		if ((*(stacks[0]->content)) == (*pivot))
+		{
+			(*pivot) = ft_pvtchr(stacks[0], stacks[0]);	
+			return (4);//ft_insertionsort();
+		}
 		if ((*(stacks[0]->content)) < (*pivot))
-			return (1);//ft_insertionsort();
+		{
+			if (stacks[1])
+				return (ft_insertionsort(stacks, column));//ft_insertionsort();
+			return (1);
+		}
 		else
 			return (4);
 	}
-	return (0);
+	return (6);
 }
 
 /* Finds subsequences of sorted numbers and splits them in runs.			*/
@@ -153,29 +178,3 @@ int	ft_quicksort(t_list	**stacks, int column, int *pivot)
 /* of 32 sorted numbers in stack_b.*/
 /* int	ft_timsort() */
 
-int	ft_insertionsort(t_list **stacks, int column)
-{
-	t_list *tmp;
-	int	count;
-	int	stack_len;
-
-	if (!column)
-	{
-		count = 0;
-		tmp = stacks[0];
-		stack_len = ft_lstsize(stacks[0]);
-		if ((*(stacks[1]->content)) < (*(stacks[0]->content)))
-			if ((*(stacks[1]->content)) < ((*(ft_lstlast(stacks[0])->content))))
-				return (0);
-		while ((*(stacks[1]->content)) < (*(tmp->content)))
-		{
-			count++;
-			tmp = tmp->next;
-		}
-		ft_printf("|ANS - %i|", count);
-		if (count > (stack_len / 2))
-			return (3);
-		return (4);
-	}
-	return (0);
-}

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:46:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/28 18:00:57 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/29 17:58:23 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int ft_bubblesort(t_list *stack, int column);
 
 int	ft_pvtchr(t_list *stack, t_list *pivot);
 
-int	ft_get_maxint(t_list *stack);
-
 int	ft_quicksort(t_list	**stack, int column, int *pivot);
+
+int	ft_check_sort(t_list *stacks, int column);
 
 int	ft_insertionsort(t_list **stacks, int column);
 
@@ -71,8 +71,6 @@ void	*ft_stack_free(int *ptr, t_list **stacks);
 /*	 T_LIST ** stacks, and the CHAR ** lst_instructions.					*/
 /* - Returns -1 to indicate an error ocurred.								*/
 int	ft_forcend(int *ptr, t_list **stacks, char **lst_instructions);
-
-int	ft_check_sort(t_list *stacks, int column);
 
 /////
 void	ft_print_stack(t_list **stack);

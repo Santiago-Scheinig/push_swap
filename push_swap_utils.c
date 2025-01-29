@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/29 15:58:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:38:13 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	ft_pvtchr(t_list *stack, t_list *pivot)
 }
 
 /* Checks if a T_LIST *, of integers content, is sorted.					*/
-/* - Returns 0 if false. 1 if true.											*/
+/* - Returns 0 if true. 1 if false.											*/
 /* - Notice that an empty list is a sorted one.								*/
 int	ft_check_sort(t_list *stacks, int column)
 {
@@ -102,7 +102,7 @@ int	ft_check_sort(t_list *stacks, int column)
 	int	ans;
 	
 	ans = 0;
-	if (!stacks || ft_lstsize(stacks) == 1)
+	if (!stacks || ft_lstsize(stacks) <= 1)
 		return (ans);
 	while (stacks)
 	{
