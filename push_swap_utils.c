@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/28 16:54:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:58:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ int	ft_pvtchr(t_list *stack, t_list *pivot)
 	int		bottom;
 
 	if (!stack || !(*(stack->content)))
+		return (0);
+	if (ft_lstsize(stack) <= 3)
 		return (0);
 	top = 0;
 	bottom = 0;

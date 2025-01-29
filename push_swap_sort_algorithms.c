@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:33:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/28 18:45:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:58:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 /* the most efficient way. One of numbers lesser than the pivot, and one with	*/
 /* numbers larger.																*/
 
-/* Tinsort skips arranged consecutive numbers. Combining it with Insertionsort	*/
+/* Timsort skips arranged consecutive numbers. Combining it with Insertionsort	*/
 /* to rearrange in the most eficient way.										*/
 
 /* Radixsort, separates the numbers by its more relevant digit. Sorts them, then*/
@@ -147,6 +147,12 @@ int	ft_quicksort(t_list	**stacks, int column, int *pivot)
 	return (0);
 }
 
+/* Finds subsequences of sorted numbers and splits them in runs.			*/
+/* Lets start with 32.														*/
+/* Using quicksort to divide the pile, then insertion sort to create a run	*/
+/* of 32 sorted numbers in stack_b.*/
+/* int	ft_timsort() */
+
 int	ft_insertionsort(t_list **stacks, int column)
 {
 	t_list *tmp;
@@ -159,9 +165,9 @@ int	ft_insertionsort(t_list **stacks, int column)
 		tmp = stacks[0];
 		stack_len = ft_lstsize(stacks[0]);
 		if ((*(stacks[1]->content)) < (*(stacks[0]->content)))
-			if ((*(stacks[1]->content)) > ((*(ft_lstlast(stacks[0])->content))))
+			if ((*(stacks[1]->content)) < ((*(ft_lstlast(stacks[0])->content))))
 				return (0);
-		while ((*(stacks[1]->content)) > (*(tmp->content)))
+		while ((*(stacks[1]->content)) < (*(tmp->content)))
 		{
 			count++;
 			tmp = tmp->next;

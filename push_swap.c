@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/28 18:19:09 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:57:31 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ static	int	ft_solve_stack(t_list **stacks, int column, int *pivot)
 		return (0);
 	if (1 < stack_len && stack_len <= 3)
 		order = ft_bubblesort(stacks[column], column);
-	else
+	else if (3 > stack_len && stack_len <= 7)
 		order = ft_quicksort(stacks, column, pivot);
-	/*if (lst_size > 5)
-		ft_raditzsort();*/
+	/*else
+		ft_timsort();*/
 	return (order);
 }
 
@@ -60,11 +60,7 @@ static	void	ft_solve(t_list **stacks, char	**lst_instructions)
 	int	loop;
 
 	loop = 0;
-	if (ft_lstsize(stacks[0]) > 3)
-		pivot = ft_pvtchr(stacks[0], stacks[0]);
-	else
-		pivot = 0;
-	ft_printf("pivot : |%i|\n", pivot);	
+	pivot = ft_pvtchr(stacks[0], stacks[0]);
 	while (((ft_check_sort(stacks[0], 0) || ft_check_sort(stacks[1], 1))) && loop < 30)
 	{
 		order_a = ft_solve_stack(stacks, 0, &pivot);
