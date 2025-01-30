@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/30 18:59:36 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/30 20:25:05 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,20 @@ t_list	*ft_lstnext_minmax(t_list *stack, int nbr, int orientation)
 		stack = stack->next;
 	}
 	return (NULL);
+}
+
+int	ft_getmin_nbr(t_list *stack)
+{
+	int		nbr;
+	
+	nbr = *(stack->content);
+	while (stack)
+	{
+		if (nbr > *(stack->content))
+			return (ft_getmin_nbr(stack));
+		stack = stack->next;
+	}
+	return (nbr);
 }
 
 /* Returns the middle pivot of an unsorted T_LIST *, of integers content,	*/

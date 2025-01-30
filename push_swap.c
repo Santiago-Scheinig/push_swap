@@ -6,22 +6,22 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/30 19:01:40 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/30 21:14:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+//to solve, still issue with pivot.
 static void	ft_merge(t_list **stacks, char **lst_instructions)
 {
 	int	order;
 	int	loop;
 
 	loop = 0;
-	ft_printf("MERGE\n");
+	//ft_printf("MERGE\n");
 	while (stacks[1] && loop++ < 20)
 	{
-		//ft_print_stack(stacks);
 		if ((*(stacks[0]->content)) > (*(stacks[1]->content)) && !ft_check_sort(stacks[0], -1)) 
 			order = 0;
 		else
@@ -54,16 +54,15 @@ static void	ft_orders(t_list **stacks, int *order_a, int *order_b, int *pivot)
 			*(order_a) = ft_quicksort(stacks, pivot, 0);
 	}
 	*(order_b) = -1;
+	stack_len = ft_lstsize(stacks[1]);
 	if (ft_check_sort(stacks[1], 1))
-	{
-		stack_len = ft_lstsize(stacks[1]);
 		if (2 <= stack_len && stack_len <= 3 && *(order_a) != 1)
 			*(order_b) = ft_bubblesort(stacks[1], 1);
-		else if (stack_len >= 3)
-			*(order_b) = ft_quicksort(stacks, pivot, 1);
-	}
+	*(order_b) = ft_quicksort(stacks, pivot, 1);
 	if (*(order_b) > -1 && *(order_a) == 1)
 		*(order_a) = -1;
+	if (*(order_b) == -1 && ft_check_sort(stacks[1], 1))
+		*(order_b) = ft_islimit(stacks[1], ft_getmin_nbr(stacks[1]), 1);
 }
 
 //clean
@@ -76,7 +75,7 @@ static void	ft_solve(t_list **stacks, char	**lst_instructions)
 
 	//loop = 0;//-
 	pivot = ft_pvtchr(stacks[0], stacks[0]);
-	while ((((ft_check_sort(stacks[0], -1)) || ft_check_sort(stacks[1], 1)))) //&& loop++ < 20)//-
+	while ((((ft_check_sort(stacks[0], -1)) || ft_check_sort(stacks[1], 1)))) //&& loop++ < 30)//-
 	{
 		//ft_print_stack(stacks);//-
 		ft_orders(stacks, &order_a, &order_b, &pivot);
@@ -141,7 +140,7 @@ int	main(int argc, char **argv)
 	if (!stacks || !lst_instructions)
 		return (ft_forcend(ptr, stacks, lst_instructions));
 	ft_solve(stacks, lst_instructions);
-	ft_print_stack(stacks);//-
+	//ft_print_stack(stacks);//-
 	ft_stack_free(ptr, stacks);
 	ft_split_free(lst_instructions);
 	return (0);

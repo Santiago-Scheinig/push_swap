@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap_quicksort.c                              :+:      :+:    :+:   */
+/*   push_swap_timsort.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:33:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/30 19:06:21 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/30 21:15:23 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,16 @@ int	ft_quicksort(t_list	**stacks, int *pivot, int column)
 	if (!column)
 	{
 		if ((*(stacks[0]->content)) == (*pivot))
+		{
 			(*pivot) = ft_pvtchr(stacks[0], stacks[0]);	
+			return (4);
+		}
 		if ((*(stacks[0]->content)) < (*pivot))
 			return (1);
 		return (ft_bubblesort(stacks[0], -1));
 	}
 	else
-		return (ft_insertionsort(stacks, pivot, 0));
+		return (ft_insertionsort(stacks, pivot, 1));
 }
 
 /* Finds subsequences of sorted numbers and splits them in runs.			*/
