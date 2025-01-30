@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/30 21:14:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/30 21:31:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static void	ft_merge(t_list **stacks, char **lst_instructions)
 	int	loop;
 
 	loop = 0;
-	//ft_printf("MERGE\n");
+	//ft_print_stack(stacks);
+	return ;
 	while (stacks[1] && loop++ < 20)
 	{
 		if ((*(stacks[0]->content)) > (*(stacks[1]->content)) && !ft_check_sort(stacks[0], -1)) 
