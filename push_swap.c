@@ -6,30 +6,32 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/29 20:41:54 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/30 19:01:40 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static	void	ft_merge_stacks(t_list **stacks, char **lst_instructions)
+static void	ft_merge(t_list **stacks, char **lst_instructions)
 {
 	int	order;
 	int	loop;
 
 	loop = 0;
-	ft_printf("\nMERGE\n");
+	ft_printf("MERGE\n");
 	while (stacks[1] && loop++ < 20)
 	{
 		//ft_print_stack(stacks);
-		if ((*(stacks[0]->content)) > (*(stacks[1]->content)) && !ft_check_sort(stacks[0], 0)) 
+		if ((*(stacks[0]->content)) > (*(stacks[1]->content)) && !ft_check_sort(stacks[0], -1)) 
 			order = 0;
 		else
-			order = ft_insertionsort(stacks, 1);
+			order = ft_insertionsort(stacks, stacks[0]->content, 1);
+		if (order < 0)
+			order = 0;
 		if (ft_execute(lst_instructions[order], stacks))
 			ft_printf("%s\n", lst_instructions[order]);
 	}
-	while (ft_check_sort(stacks[0], 0) && loop++ < 22)
+	while (ft_check_sort(stacks[0], -1) && loop++ < 22)
 	{
 		//ft_print_stack(stacks);
 		if (ft_execute(lst_instructions[3], stacks))
@@ -37,53 +39,61 @@ static	void	ft_merge_stacks(t_list **stacks, char **lst_instructions)
 	}
 }
 
-static	int	ft_solve_stack(t_list **stacks, int column, int *pivot)
+//clean
+static void	ft_orders(t_list **stacks, int *order_a, int *order_b, int *pivot)
 {
 	int	stack_len;
-	int	order;
-	
-	order = -1;
-	stack_len = ft_lstsize(stacks[column]);
-	if (!stack_len || !ft_check_sort(stacks[column], column))
-		return (-1);
-	if (1 < stack_len && stack_len <= 3)
-		order = ft_bubblesort(stacks[column], column);
-	else //if (3 < stack_len && stack_len <= 7)
-		order = ft_quicksort(stacks, column, pivot);
-	/*else
-		ft_timsort();*/
-	return (order);
+
+	*(order_a) = -1;
+	if (ft_check_sort(stacks[0], -1))
+	{
+		stack_len = ft_lstsize(stacks[0]); 
+		if (2 <= stack_len && stack_len <= 3)
+			*(order_a) = ft_bubblesort(stacks[0], -1);
+		else
+			*(order_a) = ft_quicksort(stacks, pivot, 0);
+	}
+	*(order_b) = -1;
+	if (ft_check_sort(stacks[1], 1))
+	{
+		stack_len = ft_lstsize(stacks[1]);
+		if (2 <= stack_len && stack_len <= 3 && *(order_a) != 1)
+			*(order_b) = ft_bubblesort(stacks[1], 1);
+		else if (stack_len >= 3)
+			*(order_b) = ft_quicksort(stacks, pivot, 1);
+	}
+	if (*(order_b) > -1 && *(order_a) == 1)
+		*(order_a) = -1;
 }
 
-static	void	ft_solve(t_list **stacks, char	**lst_instructions)
+//clean
+static void	ft_solve(t_list **stacks, char	**lst_instructions)
 {
 	int	pivot;
 	int	order_a;
 	int	order_b;
-	//int	loop;
+	//int	loop;//-
 
-	//loop = 0;
+	//loop = 0;//-
 	pivot = ft_pvtchr(stacks[0], stacks[0]);
-	while (((ft_check_sort(stacks[0], 0) || ft_check_sort(stacks[1], 1))))
+	while ((((ft_check_sort(stacks[0], -1)) || ft_check_sort(stacks[1], 1)))) //&& loop++ < 20)//-
 	{
-		//ft_print_stack(stacks);
-		order_a = ft_solve_stack(stacks, 0, &pivot);
-		order_b = ft_solve_stack(stacks, 1, &pivot);
+		//ft_print_stack(stacks);//-
+		ft_orders(stacks, &order_a, &order_b, &pivot);
 		if (order_a == order_b - 3)
 		{
-			ft_execute(lst_instructions[order_b + 3], stacks);
-			ft_printf("%s\n", lst_instructions[order_b + 3]);
+			if (ft_execute(lst_instructions[order_b + 3], stacks))
+				ft_printf("%s\n", lst_instructions[order_b + 3]);
+			continue ;
 		}
-		else
-		{
-			if (order_a >= 0)
-				if (ft_execute(lst_instructions[order_a], stacks))
-					ft_printf("%s\n", lst_instructions[order_a]);
-			if (order_b >= 0 && ft_lstsize(stacks[1]) > 3)
-				if (ft_execute(lst_instructions[order_b], stacks))
-					ft_printf("%s\n", lst_instructions[order_b]);
-		}
+		if (order_a != -1)
+			if (ft_execute(lst_instructions[order_a], stacks))
+				ft_printf("%s\n", lst_instructions[order_a]);
+		if (order_b != -1)
+			if (ft_execute(lst_instructions[order_b], stacks))
+				ft_printf("%s\n", lst_instructions[order_b]);
 	}
+	ft_merge(stacks, lst_instructions);
 }
 
 /* Verifies the proper format of the inputed values; If values are valid,	*/
@@ -131,8 +141,7 @@ int	main(int argc, char **argv)
 	if (!stacks || !lst_instructions)
 		return (ft_forcend(ptr, stacks, lst_instructions));
 	ft_solve(stacks, lst_instructions);
-	ft_merge_stacks(stacks, lst_instructions);
-	//ft_print_stack(stacks);
+	ft_print_stack(stacks);//-
 	ft_stack_free(ptr, stacks);
 	ft_split_free(lst_instructions);
 	return (0);

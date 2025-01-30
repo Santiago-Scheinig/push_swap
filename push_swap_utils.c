@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/29 19:38:13 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:59:36 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,23 @@ void	ft_print_stack(t_list **stacks)
 	ft_prints(&stacks[1]);
 }
 
+
+
+
+
 /* Returns the next T_LIST *, of integers content, with a lesser or higher	*/
-/* value than the head of it.												*/
+/* value than nbr.															*/
 /* - Use a possitive value as sign argument if looking for higher, negative	*/
 /* if looking for lesser.													*/
-static	t_list	*ft_lstnext_minmax(t_list *stack, int sign)
+t_list	*ft_lstnext_minmax(t_list *stack, int nbr, int orientation)
 {
-	int	nbr;
-
-	nbr = (*(stack->content));
 	while (stack)
 	{
-		if (sign > 0)
-			if (nbr < (*(stack->content)))
+		if (orientation > 0)
+			if (nbr < *(stack->content))
 				return (stack);
-		if (sign < 0)
-			if (nbr > (*(stack->content)))
+		if (orientation < 0)
+			if (nbr > *(stack->content))
 				return (stack);
 		stack = stack->next;
 	}
@@ -64,38 +65,40 @@ static	t_list	*ft_lstnext_minmax(t_list *stack, int sign)
 
 /* Returns the middle pivot of an unsorted T_LIST *, of integers content,	*/
 /* with a complexity of O(n).												*/
-int	ft_pvtchr(t_list *stack, t_list *pivot)
+int	ft_pvtchr(t_list *stack, t_list *start)
 {
 	t_list	*tmp;
 	int		top;
+	int		pivot;
 	int		bottom;
 
-	if (!stack || !(*(stack->content)))
-		return (0);
-	if (ft_lstsize(stack) <= 3)
+	if (!stack || !*(stack->content) || ft_lstsize(stack) <= 3)
 		return (0);
 	top = 0;
+	pivot = *(start->content);
 	bottom = 0;
 	tmp = stack;
 	while (tmp)
 	{
-		if ((*(pivot->content)) < (*(tmp->content)))
+		if (pivot < *(tmp->content))
 			top++;
-		else if ((*(pivot->content)) > (*(tmp->content)))
+		else if (pivot > *(tmp->content))
 			bottom++;
 		tmp = tmp->next;
 	}
 	if (top == bottom || top - 1 == bottom)
-		return ((*(pivot->content)));
+		return (pivot);
 	else if (bottom > top)
-		return (ft_pvtchr(stack, ft_lstnext_minmax(pivot, -1)));
-	return (ft_pvtchr(stack, ft_lstnext_minmax(pivot, 1)));
+		return (ft_pvtchr(stack, ft_lstnext_minmax(start, pivot, -1)));
+	return (ft_pvtchr(stack, ft_lstnext_minmax(start, pivot, 1)));
 }
 
 /* Checks if a T_LIST *, of integers content, is sorted.					*/
 /* - Returns 0 if true. 1 if false.											*/
 /* - Notice that an empty list is a sorted one.								*/
-int	ft_check_sort(t_list *stacks, int column)
+/* - Positive orientation checks max to min sort.							*/
+/* - Negative orientation checks min to max sort.							*/
+int	ft_check_sort(t_list *stacks, int orientation)
 {
 	int	nbr_i;
 	int	nbr_j;
@@ -106,12 +109,12 @@ int	ft_check_sort(t_list *stacks, int column)
 		return (ans);
 	while (stacks)
 	{
-		nbr_i = (*(stacks->content));
+		nbr_i = *(stacks->content);
 		if (stacks->next)
-			nbr_j = (*(stacks->next->content));
-		if (!column && nbr_i > nbr_j)
+			nbr_j = *(stacks->next->content);
+		if (orientation < 0 && nbr_i > nbr_j)
 			ans++;
-		if (column && nbr_i < nbr_j)
+		if (orientation >= 0 && nbr_i < nbr_j)
 			ans++;
 		stacks = stacks->next;
 	}

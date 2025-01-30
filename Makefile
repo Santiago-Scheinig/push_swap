@@ -3,10 +3,11 @@
 SRC		=	$(SRCDIR)push_swap.c 				\
 			$(SRCDIR)push_swap_utils.c 			\
 			$(SRCDIR)push_swap_checks.c 		\
-			$(SRCDIR)push_swap_quicksort.c		\
+			$(SRCDIR)push_swap_timsort.c		\
 			$(SRCDIR)push_swap_bubblesort.c		\
 			$(SRCDIR)push_swap_instructions.c	\
 			$(SRCDIR)push_swap_troubleshoot.c	\
+			$(SRCDIR)push_swap_insertionsort.c	\
 #
 BSRC	=	
 #

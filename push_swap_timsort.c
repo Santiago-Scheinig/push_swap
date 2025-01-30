@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:33:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/29 20:43:58 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/01/30 19:06:21 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,101 +75,20 @@
 /* |________|___________|___________|___________|_____________|				*/
 /*																			*/
 
-static	int	ft_inverse_getposition(int nbr, t_list *stack)
-{
-	t_list *tmp;
-	int		count;
-	int		stack_len;
-
-	if (!stack)
-		return (1);
-	count = 0;
-	tmp = ft_lstlast(stack);
-	stack_len = ft_lstsize(stack);
-	while (stack && (nbr > (*(stack->content)) || nbr < (*(tmp->content))))
-	{
-		count++;
-		tmp = stack;
-		stack = stack->next;
-	}
-	if (!count)
-		return (0);
-	if (count > (stack_len / 2))
-		return (-1);
-	return (1);
-}
-
-static	int	ft_getposition(int nbr, t_list *stack, int column)
-{
-	t_list *tmp;
-	int		count;
-	int		stack_len;
-
-	if (!stack)
-		return (1);
-	count = 0;
-	tmp = ft_lstlast(stack);
-	stack_len = ft_lstsize(stack);
-	if (!column)
-	{
-		while (stack && (nbr > (*(stack->content)) || nbr < (*(tmp->content))))
-		{
-			count++;
-			tmp = stack;
-			stack = stack->next;
-		}
-	}
-	else
-		return (ft_inverse_getposition(nbr, stack));
-	if (!count)
-		return (0);
-	if (count > (stack_len / 2))
-		return (-1);
-	return (1);
-}
-
-int	ft_insertionsort(t_list **stacks, int column)
-{
-	int	ans;
-
-	if (!column)
-	{
-		ans = ft_getposition((*(stacks[0]->content)), stacks[1], 1);
-		if (!ans || (!ft_check_sort(stacks[1], 1) && (*(stacks[0]->content)) > (*(stacks[1]->content))) || ft_lstsize(stacks[1]) <= 2)
-			return (1);
-		if (ans > 0)
-			return (7);//rb
-		return (6);//rrb
-	}
-	else
-		ans = ft_getposition((*(stacks[1]->content)), stacks[0], 0);
-	if (!ans)
-		return (0);
-	if (ans > 0)
-		return (4);//ra
-	return (3);//rra
-}
-
 /* Splits the stack with a middle pivot. */
-int	ft_quicksort(t_list	**stacks, int column, int *pivot)
+int	ft_quicksort(t_list	**stacks, int *pivot, int column)
 {
+	//timsort();
 	if (!column)
 	{
 		if ((*(stacks[0]->content)) == (*pivot))
-		{
 			(*pivot) = ft_pvtchr(stacks[0], stacks[0]);	
-			return (4);//ft_insertionsort();
-		}
 		if ((*(stacks[0]->content)) < (*pivot))
-		{
-			if (stacks[1])
-				return (ft_insertionsort(stacks, column));//ft_insertionsort();
 			return (1);
-		}
-		else
-			return (4);
+		return (ft_bubblesort(stacks[0], -1));
 	}
-	return (6);
+	else
+		return (ft_insertionsort(stacks, pivot, 0));
 }
 
 /* Finds subsequences of sorted numbers and splits them in runs.			*/
