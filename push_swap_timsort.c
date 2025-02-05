@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:33:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/30 21:15:23 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/05 21:39:07 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,23 +76,6 @@
 /*																			*/
 
 /* Splits the stack with a middle pivot. */
-int	ft_quicksort(t_list	**stacks, int *pivot, int column)
-{
-	//timsort();
-	if (!column)
-	{
-		if ((*(stacks[0]->content)) == (*pivot))
-		{
-			(*pivot) = ft_pvtchr(stacks[0], stacks[0]);	
-			return (4);
-		}
-		if ((*(stacks[0]->content)) < (*pivot))
-			return (1);
-		return (ft_bubblesort(stacks[0], -1));
-	}
-	else
-		return (ft_insertionsort(stacks, pivot, 1));
-}
 
 /* Finds subsequences of sorted numbers and splits them in runs.			*/
 /* Lets start with 32.														*/
@@ -100,3 +83,127 @@ int	ft_quicksort(t_list	**stacks, int *pivot, int column)
 /* of 32 sorted numbers in stack_b.*/
 /* int	ft_timsort() */
 
+void	ft_printruns(t_list	*stack)
+{
+	while (stack)
+	{
+		ft_printf("NBR |%i| - RUN |%i|\n", *(stack->content), stack->run);
+		stack = stack->next;
+	}		
+}
+
+int	ft_runsize(t_list *stack, int run)
+{
+	int	count;
+	
+	count = 0;
+	while (stack)
+	{
+		if (stack->run == run)
+			count++;
+		stack = stack->next;
+	}
+	return (count);
+}
+
+void	ft_setruns(t_list **stacks)
+{
+	t_list *aux;
+	int	run;
+
+	aux = stacks[0];
+	run = 0;
+	while (aux)
+	{
+		if (!aux->next)
+			break ;
+		if (*(aux->content) < *(aux->next->content))
+		{
+			aux->run = run;
+			aux->next->run = run;
+			aux = aux->next;
+		}
+		else
+		{
+			run++;
+			aux = aux->next;
+		}
+	}
+}
+
+void	ft_orders(int order_a, int order_b, t_list **stacks, char **order_lst)
+{
+	if (order_a == order_b - 3)
+		if (ft_execute(order_b + 3, stacks))
+			ft_printf("%s\n", order_lst[order_b + 3]);
+	if (order_a != -1)
+		if (ft_execute(order_a, stacks))
+			ft_printf("%s\n", order_lst[order_a]);
+	if (order_b != -1)
+		if (ft_execute(order_b, stacks))
+			ft_printf("%s\n", order_lst[order_b]);
+}
+
+void	ft_passrun(t_list **stacks, char **order_lst, int run)
+{
+	while (stacks[0] && stacks[0]->run != run)
+		ft_orders(4, -1, stacks, order_lst);
+	while (stacks[0] && stacks[0]->run == run)
+		ft_orders(1, -1, stacks, order_lst);	
+}
+
+void	ft_merge(t_list **stacks, char **order_lst, int run)
+{
+	int	order_a;
+	int	order_b;
+
+	order_a = -1;
+	order_b = -1;
+	while (stacks[0]->run != run)
+	{
+		order_a = 4;
+		order_b = ft_insertionsort(stacks, *(stacks[1]->content), 1);
+		ft_orders(order_a, order_b, stacks, order_lst);
+	}
+	while (stacks[0] && stacks[0]->run == run)
+	{
+		order_a = 1;
+		order_b = ft_insertionsort(stacks, *(stacks[1]->content), 1);
+		if (order_a == 1 && !ft_check_sort(stacks[1], 1))
+			if (*(stacks[0]->content) > *(stacks[1]->content) 
+				|| *(stacks[0]->content) < *(ft_lstlast(stacks[1])->content))
+					order_b = -1;
+		if (order_b > 1 && order_a == 1)
+			order_a = -1;
+		ft_orders(order_a, order_b, stacks, order_lst);
+	}
+	while (ft_check_sort(stacks[1], 1))
+		ft_orders(-1, 6, stacks, order_lst);
+}
+		
+void	ft_timsort(t_list **stacks, char **order_lst)
+{
+	int	run;
+	int	run_size;
+	int	run_size_prev;
+
+	run = 0;
+	ft_setruns(stacks);
+	run_size = ft_runsize(stacks[0], run);
+	run_size_prev = 0;
+	while (stacks[0])
+	{
+		if (run_size > 0)
+		{
+			if (run_size == run_size_prev || run_size == run_size_prev -1)
+			{
+				ft_merge(stacks, order_lst, run);
+				break;
+			}
+			else
+				ft_passrun(stacks, order_lst, run);
+		}
+		run_size_prev = run_size;
+		run_size = ft_runsize(stacks[0], ++run);
+	}
+}

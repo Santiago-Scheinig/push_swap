@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:04:06 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/09 23:01:08 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/05 21:06:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ static	int	ft_double_check(char **argf)
 }
 
 /* Verifies that every value in an array of numeric strings, are between	*/
-/* the MAX_INT and MIN_int. (including them)								*/
-/* - If all the values are valid, returns an INT * including them. If not	*/
-/*   returns 0.																*/
+/* the MAX_INT and MIN_INT, both included. 									*/
+/* - If all the values are valid, returns an the amount of values.			*/
+/* - If any value is invalid, returns 0.									*/
 static	int	ft_maxint_check(char **argf, int **ptr)
 {
 	long	check_nbr;

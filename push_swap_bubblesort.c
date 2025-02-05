@@ -6,65 +6,69 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:45:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/30 18:50:31 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/05 21:37:02 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static	int	ft_inverse_bubblesort(t_list *stack)
+static int	ft_inverse_order(t_list *stack)
 {
 	int	nbr_i;
 	int	nbr_j;
 	int	nbr_l;
-	int	lst_len;
 
 	nbr_i = *(stack->content);
 	nbr_j = *(stack->next->content);
 	nbr_l = *(ft_lstlast(stack)->content);
-	lst_len = ft_lstsize(stack);
-	if (nbr_i < nbr_j && lst_len <= 3)
+	if (nbr_i < nbr_j)
 	{
 		if (nbr_l != nbr_j)
 			if (nbr_i < nbr_l)
-				return (7);//rb
+				return (RB_ORDER);
 	}
-	else if (lst_len <= 3)
-		if (nbr_l != nbr_j)
+	else if (nbr_l != nbr_j)
 			if (nbr_i > nbr_l)
-				return (6);//rrb
-	if (nbr_i < nbr_j && lst_len >= 4)
-		return (7);///rb
-	return (5);//sb
+				return (RRB_ORDER);
+	return (SB_ORDER);
 }
 
-/* Sorts a T_LIST * with a O(n^n) deterministic solution.		*/
-/* - Use - numbers to sort from min to max */
-/* - Use + numbers to sort from max to min*/
-int ft_bubblesort(t_list *stack, int orientation)
+static int	ft_order(t_list *stack, int orientation)
 {
 	int	nbr_i;
 	int	nbr_j;
 	int	nbr_l;
-	int	lst_len;
 
 	if (orientation >= 0)
-		return (ft_inverse_bubblesort(stack));
+		return (ft_inverse_order(stack));
 	nbr_i = *(stack->content);
 	nbr_j = *(stack->next->content);
 	nbr_l = *(ft_lstlast(stack)->content);
-	lst_len = ft_lstsize(stack);
-	if (nbr_i > nbr_j && lst_len <= 3)
+	if (nbr_i > nbr_j)
 	{
 		if (nbr_l != nbr_j)
 			if (nbr_i > nbr_l)
-				return (4);//ra
+				return (RA_ORDER);
 	}
-	else if (lst_len <= 3)
-		if (nbr_l != nbr_j)
+	else if (nbr_l != nbr_j)
 			if (nbr_i > nbr_l)
-				return (3);//rra
-	if (nbr_i > nbr_j && lst_len >= 4)
-		return (4);//ra
-	return (2);//sa
+				return (RRA_ORDER);
+	return (SA_ORDER);
+}
+
+/* Sorts a numeric T_LIST * with size <= 3 with a O(n) order solution.		*/
+/* - Use negative orientation to sort from min to max.						*/
+/* - Use positive orientation to sort from max to min.						*/
+/* - Undefined behavior for T_LIST * larger than specified.					*/
+void	ft_bubblesort(t_list **stacks, char **order_arr, int orientation)
+{
+	int	order;
+
+	order = NO_ORDER;
+	while (ft_check_sort(stacks[0], orientation))
+	{
+		order = ft_order(stacks[0], orientation);
+		ft_execute(order, stacks);
+		ft_printf("%s\n", order_arr[order]);
+	}
 }

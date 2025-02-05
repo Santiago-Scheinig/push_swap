@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 20:10:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/30 17:59:31 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/05 20:27:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ void	*ft_split_free(char **split)
 
 /* Failsafe specific to push_swap in case of error.							*/
 /* - Frees the stacks, which are a combination of an INT * ptr and a		*/
-/*	 T_LIST ** stacks, and the CHAR ** lst_instructions.					*/
+/*	 T_LIST ** stacks, and the CHAR ** order_arr.							*/
 /* - Returns -1 to indicate an error ocurred.								*/
-int	ft_forcend(int *ptr, t_list **stacks, char **lst_instructions)
+int	ft_forcend(int *ptr, t_list **stacks, char **order_arr)
 {
 	ft_stack_free(ptr, stacks);
-	ft_split_free(lst_instructions);
+	ft_split_free(order_arr);
 	ft_printfd(2, "Error\n");
 	return (-1);
 }

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/30 20:25:05 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/05 21:08:59 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,18 @@ void	ft_print_stack(t_list **stacks)
 /* value than nbr.															*/
 /* - Use a possitive value as sign argument if looking for higher, negative	*/
 /* if looking for lesser.													*/
-t_list	*ft_lstnext_minmax(t_list *stack, int nbr, int orientation)
+t_list	*ft_runnext_nbr(t_list *stack, int run)
 {
 	while (stack)
 	{
-		if (orientation > 0)
-			if (nbr < *(stack->content))
-				return (stack);
-		if (orientation < 0)
-			if (nbr > *(stack->content))
+		if (stack[0].run == run)
 				return (stack);
 		stack = stack->next;
 	}
 	return (NULL);
 }
+
+//if is max return 1 //if is min return -1 // else 0
 
 int	ft_getmin_nbr(t_list *stack)
 {
@@ -75,36 +73,6 @@ int	ft_getmin_nbr(t_list *stack)
 		stack = stack->next;
 	}
 	return (nbr);
-}
-
-/* Returns the middle pivot of an unsorted T_LIST *, of integers content,	*/
-/* with a complexity of O(n).												*/
-int	ft_pvtchr(t_list *stack, t_list *start)
-{
-	t_list	*tmp;
-	int		top;
-	int		pivot;
-	int		bottom;
-
-	if (!stack || !*(stack->content) || ft_lstsize(stack) <= 3)
-		return (0);
-	top = 0;
-	pivot = *(start->content);
-	bottom = 0;
-	tmp = stack;
-	while (tmp)
-	{
-		if (pivot < *(tmp->content))
-			top++;
-		else if (pivot > *(tmp->content))
-			bottom++;
-		tmp = tmp->next;
-	}
-	if (top == bottom || top - 1 == bottom)
-		return (pivot);
-	else if (bottom > top)
-		return (ft_pvtchr(stack, ft_lstnext_minmax(start, pivot, -1)));
-	return (ft_pvtchr(stack, ft_lstnext_minmax(start, pivot, 1)));
 }
 
 /* Checks if a T_LIST *, of integers content, is sorted.					*/
@@ -137,29 +105,29 @@ int	ft_check_sort(t_list *stacks, int orientation)
 
 /* Executes a given instruction and prints it on stdout.					*/
 /* - If the instruction isn't valid, returns -1.							*/
-int	ft_execute(const char *instruction, t_list **stacks)
+int	ft_execute(int instruction, t_list **stacks)
 {
-	if (!ft_strncmp(instruction, "sa", 3))
+	if (instruction == SA_ORDER)
 		return (ft_swap(&stacks[0]));
-	else if (!ft_strncmp(instruction, "sb", 3))
+	else if (instruction == SB_ORDER)
 		return (ft_swap(&stacks[1]));
-	else if (!ft_strncmp(instruction, "ss", 3))
+	else if (instruction == SS_ORDER)
 		return (ft_double_ins(ft_swap, &stacks[0], &stacks[1]));
-	else if (!ft_strncmp(instruction, "pa", 3))
+	else if (instruction == PA_ORDER)
 		return (ft_push(&stacks[1], &stacks[0]));
-	else if (!ft_strncmp(instruction, "pb", 3))
+	else if (instruction == PB_ORDER)
 		return (ft_push(&stacks[0], &stacks[1]));
-	else if (!ft_strncmp(instruction, "ra", 3))
+	else if (instruction == RA_ORDER)
 		return (ft_rotate(&stacks[0]));
-	else if (!ft_strncmp(instruction, "rb", 3))
+	else if (instruction == RB_ORDER)
 		return (ft_rotate(&stacks[1]));
-	else if (!ft_strncmp(instruction, "rr", 3))
+	else if (instruction == RR_ORDER)
 		return (ft_double_ins(ft_rotate, &stacks[0], &stacks[1]));
-	else if (!ft_strncmp(instruction, "rra", 4))
+	else if (instruction == RRA_ORDER)
 		return (ft_reverse_rotate(&stacks[0]));
-	else if (!ft_strncmp(instruction, "rrb", 4))
+	else if (instruction == RRB_ORDER)
 		return (ft_reverse_rotate(&stacks[1]));
-	else if (!ft_strncmp(instruction, "rrr", 4))
+	else if (instruction == RRR_ORDER)
 		return (ft_double_ins(ft_reverse_rotate, &stacks[0], &stacks[1]));
 	return (-1);
 }
