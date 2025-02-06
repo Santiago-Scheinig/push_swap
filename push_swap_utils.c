@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/05 21:08:59 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:55:48 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,37 +40,25 @@ void	ft_print_stack(t_list **stacks)
 	ft_prints(&stacks[1]);
 }
 
-
-
-
-
-/* Returns the next T_LIST *, of integers content, with a lesser or higher	*/
-/* value than nbr.															*/
-/* - Use a possitive value as sign argument if looking for higher, negative	*/
-/* if looking for lesser.													*/
-t_list	*ft_runnext_nbr(t_list *stack, int run)
+//returns either the maximum or minimum number on the stack.
+//Use positive orientation for the maximum.
+//Use negative orientation for the minimum. 
+int	ft_getlimit_nbr(t_list *stack, int orientation)
 {
-	while (stack)
-	{
-		if (stack[0].run == run)
-				return (stack);
-		stack = stack->next;
-	}
-	return (NULL);
-}
-
-//if is max return 1 //if is min return -1 // else 0
-
-int	ft_getmin_nbr(t_list *stack)
-{
+	t_list	*tmp;
 	int		nbr;
-	
-	nbr = *(stack->content);
-	while (stack)
+
+	tmp = stack;
+	nbr = *(tmp->content);
+	while (tmp)
 	{
-		if (nbr > *(stack->content))
-			return (ft_getmin_nbr(stack));
-		stack = stack->next;
+		if (orientation < 0)
+			if (nbr > *(tmp->content))
+				return (ft_getlimit_nbr(tmp, orientation));
+		if (orientation >= 0)
+			if (nbr < *(tmp->content))
+				return (ft_getlimit_nbr(tmp, orientation));
+		tmp = tmp->next;
 	}
 	return (nbr);
 }

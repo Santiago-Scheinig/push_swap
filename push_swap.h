@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:46:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/05 21:37:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/06 19:59:48 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void	ft_quicksort(t_list **stacks, char **order_arr);
 
 void	ft_timsort(t_list **stacks, char **lst_instructions);
 
-int	ft_insertionsort(t_list **stacks, int limit, int orientation);
+int	ft_insertionsort(t_list *stack_des, int nbr, int orientation, int column);
 
 /*--------------------------------------------------------------------------*/
 /*----------------------------------UTILITY---------------------------------*/
@@ -141,13 +141,13 @@ t_list	*ft_runnext_nbr(t_list *stack, int run);
 
 t_list	*ft_lstnext_nbr(t_list *stack, int nbr, int orientation);
 
-int	ft_getposition(int nbr, t_list *stack, int column);
+int	ft_getin_position(t_list *stack, int nbr, int column);
 
 int	ft_islimit(t_list *stack, int nbr, int column);
 
 int	ft_check_sort(t_list *stacks, int column);
 
-int	ft_getmin_nbr(t_list *stack);
+int	ft_getlimit_nbr(t_list *stack, int orientation);
 
 /////
 void	ft_print_stack(t_list **stack);

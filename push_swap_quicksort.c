@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:35:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/05 21:46:16 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/06 22:02:46 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,53 +43,47 @@ static int	ft_pvtchr(t_list *stack, t_list *start)
 }
 
 //to solve, still issue with pivot.
-static void	ft_merge(t_list **stacks, char **lst_instructions)
+static void	ft_merge(t_list **stacks, char **order_arr)
 {
 	int	order;
-	int	loop;
 
-	loop = 0;
-	//ft_print_stack(stacks);
-	return ;
-	while (stacks[1] && loop++ < 20)
+	while (stacks[1])
 	{
-		if ((*(stacks[0]->content)) > (*(stacks[1]->content)) && !ft_check_sort(stacks[0], -1)) 
-			order = 0;
-		else
-			order = ft_insertionsort(stacks, *(stacks[0]->content), 1);
-		if (order < 0)
-			order = 0;
+		order = ft_insertionsort(stacks[0], *(stacks[1]->content), -1, 0);
+		if (order == NO_ORDER && *(stacks[1]->content) < *(stacks[0]->content))
+			order = PA_ORDER;
+		if (order == NO_ORDER && !ft_check_sort(stacks[0], -1))
+			order = PA_ORDER;
 		if (ft_execute(order, stacks))
-			ft_printf("%s\n", lst_instructions[order]);
-	}
-	while (ft_check_sort(stacks[0], -1) && loop++ < 22)
-	{
-		//ft_print_stack(stacks);
-		if (ft_execute(RRA_ORDER, stacks))
-			ft_printf("%s\n", lst_instructions[RRA_ORDER]);
+			ft_printf("%s\n", order_arr[order]);
 	}
 }
 
 static int	ft_orders(t_list **stacks, int *order_b, int *pivot)
 {
-	int	order_a;
+	t_list	*tmp;
+	int		order_a;
+	int		next_nbr;
 
 	order_a = NO_ORDER;
+	tmp = ft_lstnext_nbr(stacks[0], *(pivot), -1);
+	if (!tmp)
+		tmp = ft_lstnext_nbr(stacks[0], ft_pvtchr(stacks[0], stacks[0]), -1);
 	if (ft_check_sort(stacks[0], -1))
 	{
-		if ((*(stacks[0]->content)) == (*pivot))
-		{
-			(*pivot) = ft_pvtchr(stacks[0], stacks[0]);	
-			order_a = RA_ORDER;
-		}
+		next_nbr = *(tmp->content);
 		if ((*(stacks[0]->content)) < (*pivot))
 			order_a = PB_ORDER;
+		else
+			order_a = ft_insertionsort(stacks[0], next_nbr, 1, 0);
+		if ((*(stacks[0]->content)) == (*pivot))
+			(*pivot) = ft_pvtchr(stacks[0], stacks[0]);
 	}
-	*(order_b) = ft_insertionsort(stacks, *(pivot), 1);
+	*(order_b) = ft_insertionsort(stacks[1], next_nbr, 1, 1);
 	if (*(order_b) > NO_ORDER && order_a == PB_ORDER)
 		order_a = NO_ORDER;
-	if (*(order_b) == NO_ORDER && ft_check_sort(stacks[1], 1))
-		*(order_b) = ft_islimit(stacks[1], ft_getmin_nbr(stacks[1]), 1);
+	if (order_a < 0 && *(order_b) < 0 && ft_check_sort(stacks[1], 1))
+		*(order_b) = RRB_ORDER;
 	return (order_a);
 }
 
@@ -98,11 +92,9 @@ void	ft_quicksort(t_list **stacks, char **order_arr)
 	int	pivot;
 	int	order_a;
 	int	order_b;
-	int	loop;
 
-	loop = 0;
 	pivot = ft_pvtchr(stacks[0], stacks[0]);
-	while (((ft_check_sort(stacks[0], -1)) || ft_check_sort(stacks[1], 1)) && ++loop < 30)
+	while (((ft_check_sort(stacks[0], -1)) || ft_check_sort(stacks[1], 1)))
 	{
 		order_a = ft_orders(stacks, &order_b, &pivot);
 		if (order_a == order_b - 3)
@@ -117,6 +109,8 @@ void	ft_quicksort(t_list **stacks, char **order_arr)
 		if (order_b != -1)
 			if (ft_execute(order_b, stacks))
 				ft_printf("%s\n", order_arr[order_b]);
+		if (ft_lstsize(stacks[0]) <= 3)
+			ft_bubblesort(stacks, order_arr, -1);
 	}
 	ft_merge(stacks, order_arr);
 }

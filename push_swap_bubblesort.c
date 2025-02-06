@@ -6,13 +6,13 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:45:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/05 21:37:02 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:53:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int	ft_inverse_order(t_list *stack)
+static int	ft_inverse_orders(t_list *stack)
 {
 	int	nbr_i;
 	int	nbr_j;
@@ -33,14 +33,14 @@ static int	ft_inverse_order(t_list *stack)
 	return (SB_ORDER);
 }
 
-static int	ft_order(t_list *stack, int orientation)
+static int	ft_orders(t_list *stack, int orientation)
 {
 	int	nbr_i;
 	int	nbr_j;
 	int	nbr_l;
 
 	if (orientation >= 0)
-		return (ft_inverse_order(stack));
+		return (ft_inverse_orders(stack));
 	nbr_i = *(stack->content);
 	nbr_j = *(stack->next->content);
 	nbr_l = *(ft_lstlast(stack)->content);
@@ -67,7 +67,7 @@ void	ft_bubblesort(t_list **stacks, char **order_arr, int orientation)
 	order = NO_ORDER;
 	while (ft_check_sort(stacks[0], orientation))
 	{
-		order = ft_order(stacks[0], orientation);
+		order = ft_orders(stacks[0], orientation);
 		ft_execute(order, stacks);
 		ft_printf("%s\n", order_arr[order]);
 	}

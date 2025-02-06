@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:33:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/05 21:39:07 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:06:06 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@
 /* Using quicksort to divide the pile, then insertion sort to create a run	*/
 /* of 32 sorted numbers in stack_b.*/
 /* int	ft_timsort() */
-
+/* 
 void	ft_printruns(t_list	*stack)
 {
 	while (stack)
@@ -207,3 +207,4 @@ void	ft_timsort(t_list **stacks, char **order_lst)
 		run_size = ft_runsize(stacks[0], ++run);
 	}
 }
+ */
