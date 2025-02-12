@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:35:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/06 22:02:46 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/12 19:40:11 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static int	ft_pvtchr(t_list *stack, t_list *start)
 	return (ft_pvtchr(stack, ft_lstnext_nbr(start, pivot, 1)));
 }
 
-//to solve, still issue with pivot.
 static void	ft_merge(t_list **stacks, char **order_arr)
 {
 	int	order;
@@ -72,7 +71,7 @@ static int	ft_orders(t_list **stacks, int *order_b, int *pivot)
 	if (ft_check_sort(stacks[0], -1))
 	{
 		next_nbr = *(tmp->content);
-		if ((*(stacks[0]->content)) < (*pivot))
+		if ((*(stacks[0]->content)) < (*pivot) || *(stacks[0]->content) == next_nbr)
 			order_a = PB_ORDER;
 		else
 			order_a = ft_insertionsort(stacks[0], next_nbr, 1, 0);
@@ -103,14 +102,12 @@ void	ft_quicksort(t_list **stacks, char **order_arr)
 				ft_printf("%s\n", order_arr[order_b + 3]);
 			continue ;
 		}
-		if (order_a != -1)
-			if (ft_execute(order_a, stacks))
-				ft_printf("%s\n", order_arr[order_a]);
-		if (order_b != -1)
-			if (ft_execute(order_b, stacks))
-				ft_printf("%s\n", order_arr[order_b]);
+		if (ft_execute(order_a, stacks))
+			ft_printf("%s\n", order_arr[order_a]);
+		if (ft_execute(order_b, stacks))
+			ft_printf("%s\n", order_arr[order_b]);
 		if (ft_lstsize(stacks[0]) <= 3)
-			ft_bubblesort(stacks, order_arr, -1);
+			ft_bubblesort(stacks, order_arr, -1, 0);
 	}
 	ft_merge(stacks, order_arr);
 }

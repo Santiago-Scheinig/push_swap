@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/06 17:55:48 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/12 19:07:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,5 @@ int	ft_execute(int instruction, t_list **stacks)
 		return (ft_reverse_rotate(&stacks[1]));
 	else if (instruction == RRR_ORDER)
 		return (ft_double_ins(ft_reverse_rotate, &stacks[0], &stacks[1]));
-	return (-1);
+	return (0);
 }

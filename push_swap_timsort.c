@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:33:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/06 17:06:06 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/12 22:44:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@
 /* Using quicksort to divide the pile, then insertion sort to create a run	*/
 /* of 32 sorted numbers in stack_b.*/
 /* int	ft_timsort() */
-/* 
+
 void	ft_printruns(t_list	*stack)
 {
 	while (stack)
@@ -106,90 +106,230 @@ int	ft_runsize(t_list *stack, int run)
 	return (count);
 }
 
-void	ft_setruns(t_list **stacks)
+int	ft_main_runchr(t_list *stack, int max_run)
 {
-	t_list *aux;
 	int	run;
-
-	aux = stacks[0];
-	run = 0;
-	while (aux)
+	int	aux_runsize;
+	int	main_run;
+	int	main_runsize;
+	
+	run = -2;
+	main_run = max_run;
+	main_runsize = 0;
+	while (++run <= max_run)
 	{
-		if (!aux->next)
-			break ;
-		if (*(aux->content) < *(aux->next->content))
+		aux_runsize = ft_runsize(stack, run);
+		if (aux_runsize >= main_runsize)
 		{
-			aux->run = run;
-			aux->next->run = run;
-			aux = aux->next;
+			main_runsize = aux_runsize;
+			main_run = run;
 		}
-		else
+		run++;
+	}
+	//ft_printf("MAIN RUN |%i| - SIZE |%i|\n", main_run, main_runsize);
+	return (main_run);
+}
+
+int	ft_setruns(t_list *stack, int start, int dir)
+{
+	while (stack)
+	{
+		if (dir >= 0)
 		{
-			run++;
-			aux = aux->next;
+			if (stack->next && *(stack->content) > *(stack->next->content))
+			{
+				stack->run = start;
+				stack->next->run = start;
+			}
+			else
+				start++;
+		}
+		else 
+		{
+			if (stack->next && *(stack->content) < *(stack->next->content))
+			{
+				stack->run = start;
+				stack->next->run = start;
+			}
+			else
+				start++;
+		}
+		stack = stack->next;
+	}
+	return (start);
+}
+
+int	ft_runmod(t_list *stack, int run, int new_run)
+{
+	while (stack)
+	{
+		if (stack->run == run)
+		{
+			while (stack && stack->run == run)
+			{
+				stack->run = new_run;
+				stack = stack->next;
+			}
+			return (1);
+		}
+		stack = stack->next;
+	}
+	return (0);
+}
+
+int	ft_limit_runchr(t_list *stack, int run, int limit)
+{
+	while (stack)
+	{
+		if (stack->next && stack->run == run)
+		{
+			if (limit < 0)
+				return (*(stack->content));
+			while (stack->next && stack->next->run == run)
+				stack = stack->next;
+			return (*(stack->content));
+		}
+		stack = stack->next;
+	}
+	return (-1);
+}
+
+void	ft_splited_runchr(t_list *stack, int max_run)
+{
+	int	i;
+	int	run;
+	int	limit_run;
+
+	run = -1;
+	while (++run <= max_run)
+	{
+		i = run;
+		limit_run = ft_limit_runchr(stack, run, 1);
+		while (++i <= max_run)
+		{
+			if (limit_run != -1 && limit_run < ft_limit_runchr(stack, i, -1))
+			{
+				ft_runmod(stack, i, run);
+				break ;
+			}
 		}
 	}
 }
 
-void	ft_orders(int order_a, int order_b, t_list **stacks, char **order_lst)
+int		ft_get_minrun(t_list *stack)
 {
-	if (order_a == order_b - 3)
-		if (ft_execute(order_b + 3, stacks))
-			ft_printf("%s\n", order_lst[order_b + 3]);
-	if (order_a != -1)
-		if (ft_execute(order_a, stacks))
-			ft_printf("%s\n", order_lst[order_a]);
-	if (order_b != -1)
-		if (ft_execute(order_b, stacks))
-			ft_printf("%s\n", order_lst[order_b]);
+	int	ans;
+	int	min_run;
+	int	stack_len;
+
+	min_run = 16;
+	stack_len = ft_lstsize(stack);
+	ans = stack_len / min_run;
+	while ((ans % 2) != 0 && min_run != 8)
+		ans = stack_len / --min_run;
+	return (min_run);
 }
 
-void	ft_passrun(t_list **stacks, char **order_lst, int run)
+/* void	ft_merge_norun(t_list **stacks, char **order_lst, int run)
 {
-	while (stacks[0] && stacks[0]->run != run)
-		ft_orders(4, -1, stacks, order_lst);
-	while (stacks[0] && stacks[0]->run == run)
-		ft_orders(1, -1, stacks, order_lst);	
-}
-
-void	ft_merge(t_list **stacks, char **order_lst, int run)
-{
-	int	order_a;
-	int	order_b;
-
-	order_a = -1;
-	order_b = -1;
-	while (stacks[0]->run != run)
+	if (stacks[0]->next->run == -1)
 	{
-		order_a = 4;
-		order_b = ft_insertionsort(stacks, *(stacks[1]->content), 1);
-		ft_orders(order_a, order_b, stacks, order_lst);
+		while (stacks[0]->run == -1)
+		{
+			if (ft_execute(PB_ORDER, stacks))
+				ft_printf("%s\n", order_lst[PB_ORDER]);
+			if (ft_execute(RB_ORDER, stacks))
+				ft_printf("%s\n", order_lst[RB_ORDER]);
+		}
 	}
-	while (stacks[0] && stacks[0]->run == run)
+	if (ft_execute(ft_bubblesort(stacks, order_lst, -1), stacks))
 	{
-		order_a = 1;
-		order_b = ft_insertionsort(stacks, *(stacks[1]->content), 1);
-		if (order_a == 1 && !ft_check_sort(stacks[1], 1))
+		stacks[0]->run == run;
+		stacks[0]->next->run == run;
+		ft_printf("%s\n", order_lst[SA_ORDER]);
+	}
+}*/
+
+void	ft_make_minrun(t_list **stacks, char **order_lst, int main_run, int min_run)
+{
+	int	order;
+
+	while (ft_runsize(stacks[1], -1) < min_run)
+	{
+		//ft_print_stack(stacks);
+		if (main_run && stacks[0]->run == main_run)
+			order = RA_ORDER;
+		if (stacks[0] && stacks[0]->run != main_run)
+			order = ft_insertionsort(stacks[1], *(stacks[0]->content), 1, 1);
+		if (!ft_check_sort(stacks[1], 1) && stacks[0]->run != main_run)
 			if (*(stacks[0]->content) > *(stacks[1]->content) 
 				|| *(stacks[0]->content) < *(ft_lstlast(stacks[1])->content))
-					order_b = -1;
-		if (order_b > 1 && order_a == 1)
-			order_a = -1;
-		ft_orders(order_a, order_b, stacks, order_lst);
+				order = PB_ORDER;
+		if (order == NO_ORDER)
+			order = PB_ORDER;
+		if (order != NO_ORDER && ft_execute(order, stacks))
+		{
+			ft_printf("%s\n", order_lst[order]);
+			if (order == PB_ORDER)
+				stacks[1]->run = -1;
+		}
 	}
-	while (ft_check_sort(stacks[1], 1))
-		ft_orders(-1, 6, stacks, order_lst);
+	//ft_printruns(stacks[1]);
 }
-		
+
+void	ft_solve(t_list **stacks, char **order_lst, int main_run, int min_run)
+{
+	int	stack_len;
+	int	loop;
+
+	loop = -1;
+	stack_len = 0;
+	while (stack_len < 3 && ft_check_sort(stacks[0], -1))
+	{
+		if (stacks[0]->run == main_run)
+			if (ft_execute(RA_ORDER, stacks))
+				ft_printf("%s\n", order_lst[RA_ORDER]);
+		if (stacks[0]->run != main_run)
+		{
+			if (ft_execute(PB_ORDER, stacks))
+				ft_printf("%s\n", order_lst[PB_ORDER]);
+			stacks[1]->run = -1;
+			stack_len++;
+		}
+	}
+	ft_bubblesort(stacks, order_lst, 1, 1);
+	while (ft_check_sort(stacks[0], -1) && ++loop < 1)
+	{
+		ft_make_minrun(stacks, order_lst, main_run, min_run);
+		ft_setruns(stacks[1], 0, 1);
+		//ft_printruns(stacks[1]);
+		//ft_print_stack(stacks);
+	}
+}
+// if a number is part of a negative run there's two possible ways to exploit it.
+// if the next number isn't part of a negative run, saving the number in the back
+// while we push the positive run, until we find its right position and push it with it.
+// if there exists more than 1 number part of a negative run, PB + RRB will sort them in
+// ascending way as we push them. Creating a new sorted run.		
 void	ft_timsort(t_list **stacks, char **order_lst)
 {
-	int	run;
-	int	run_size;
-	int	run_size_prev;
+	int	end_run;
+	int	main_run;
+	int	min_run;
+	//int	run_size;
+	//int	run_size_prev;
 
-	run = 0;
-	ft_setruns(stacks);
-	run_size = ft_runsize(stacks[0], run);
+	min_run = ft_get_minrun(stacks[0]);
+	ft_printf("MINRUN |%i|\n", min_run);
+	end_run = ft_setruns(stacks[0], 0, -1);
+	ft_splited_runchr(stacks[0], end_run);
+	main_run = ft_main_runchr(stacks[0], end_run);
+	//ft_printruns(stacks[0]);
+	if (ft_runsize(stacks[0], main_run) >= min_run)
+		ft_solve(stacks, order_lst, main_run, min_run);
+	else
+		ft_solve(stacks, order_lst, 0, min_run);
+/* 	run_size = ft_runsize(stacks[0], run);
 	run_size_prev = 0;
 	while (stacks[0])
 	{
@@ -205,6 +345,5 @@ void	ft_timsort(t_list **stacks, char **order_lst)
 		}
 		run_size_prev = run_size;
 		run_size = ft_runsize(stacks[0], ++run);
-	}
+	} */
 }
- */

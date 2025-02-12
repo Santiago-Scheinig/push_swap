@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:46:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/06 19:59:48 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/12 19:40:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,53 +46,46 @@ int	*ft_stack_check(char **argv, int *ptr_len);
 /*-------------------------------INSTRUCTIONS-------------------------------*/
 /*--------------------------------------------------------------------------*/
 
-#ifndef NO_ORDER
 # define NO_ORDER -1
-#endif
 
-#ifndef PA_ORDER
+/* Pushes the first element from STACK B to STACK A as it's first.			*/
 # define PA_ORDER 0
-#endif
 
-#ifndef PB_ORDER
+/* Pushes the first element from STACK A to STACK B as it's first.			*/
 # define PB_ORDER 1
-#endif
 
-#ifndef SA_ORDER
+/* Swaps the first two elements of STACK A.									*/
 # define SA_ORDER 2
-#endif
 
-#ifndef RRA_ORDER
+/* Rotates every element on STACK A one position down, making the last		*/
+/* element it's first.														*/
 # define RRA_ORDER 3
-#endif
 
-#ifndef RA_ORDER
+/* Rotates every element on STACK A one position up, making the first		*/
+/* element it's last.														*/
 # define RA_ORDER 4
-#endif
 
-#ifndef SB_ORDER
+/* Swaps the first two elements of STACK B.									*/
 # define SB_ORDER 5
-#endif
 
-#ifndef RRB_ORDER
+/* Rotates every element on STACK B one position down, making the last		*/
+/* element it's first.														*/
 # define RRB_ORDER 6
-#endif
 
-#ifndef RB_ORDER
+/* Rotates every element on STACK B one position up, making the first		*/
+/* element it's last.														*/
 # define RB_ORDER 7
-#endif
 
-#ifndef SS_ORDER
+/* Swaps the first two elements of both STACKS.								*/
 # define SS_ORDER 8
-#endif
 
-#ifndef RRR_ORDER
+/* Rotates every element on both STACKS one position down, making the last	*/
+/* elements their first.													*/
 # define RRR_ORDER 9
-#endif
 
-#ifndef RR_ORDER
+/* Rotates every element on both STACKS one position up, making the first	*/
+/* elements their last.														*/
 # define RR_ORDER 10
-#endif
 
 /* Executes the instruction sent as argument one time with both stack_a		*/
 /* and stack_b.																*/
@@ -125,7 +118,7 @@ int	ft_swap(t_list **stack);
 /*--------------------------------ALGORITHMS--------------------------------*/
 /*--------------------------------------------------------------------------*/
 
-void	ft_bubblesort(t_list **stacks, char **order_arr, int orientation);
+int	ft_bubblesort(t_list **stacks, char **order_arr, int orientation, int column);
 
 void	ft_quicksort(t_list **stacks, char **order_arr);
 
