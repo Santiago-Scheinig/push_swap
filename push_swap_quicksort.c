@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:35:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/12 19:40:11 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/19 20:36:49 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-/* Returns the middle pivot of an unsorted T_LIST *, of integers content,	*/
-/* with a complexity of O(n).												*/
+/*	Returns the middle pivot of a numeric T_LIST * with a O(n^2) space		*/
+/*	complexity.																*/
 static int	ft_pvtchr(t_list *stack, t_list *start)
 {
 	t_list	*tmp;
@@ -21,7 +21,7 @@ static int	ft_pvtchr(t_list *stack, t_list *start)
 	int		pivot;
 	int		bottom;
 
-	if (!stack || !*(stack->content) || ft_lstsize(stack) <= 3)
+	if (!stack || ft_lstsize(stack) <= 3)
 		return (0);
 	top = 0;
 	pivot = *(start->content);
@@ -38,26 +38,35 @@ static int	ft_pvtchr(t_list *stack, t_list *start)
 	if (top == bottom || top - 1 == bottom)
 		return (pivot);
 	else if (bottom > top)
-		return (ft_pvtchr(stack, ft_lstnext_nbr(start, pivot, -1)));
-	return (ft_pvtchr(stack, ft_lstnext_nbr(start, pivot, 1)));
+		return (ft_pvtchr(stack, ft_nextnbr_chr(start, pivot, -1)));
+	return (ft_pvtchr(stack, ft_nextnbr_chr(start, pivot, 1)));
 }
 
+/*	After both stacks are confirmed to be sorted, if any values are still 	*/
+/*	on the STACK_B, it will merge them back to STACK_A using Insertionsort.	*/
 static void	ft_merge(t_list **stacks, char **order_arr)
 {
+	int	limit;
 	int	order;
-
+	
 	while (stacks[1])
 	{
-		order = ft_insertionsort(stacks[0], *(stacks[1]->content), -1, 0);
-		if (order == NO_ORDER && *(stacks[1]->content) < *(stacks[0]->content))
-			order = PA_ORDER;
-		if (order == NO_ORDER && !ft_check_sort(stacks[0], -1))
-			order = PA_ORDER;
+		order = ft_insertionsort(stacks[0], *(stacks[1]->content), -1, -1);
 		if (ft_execute(order, stacks))
 			ft_printf("%s\n", order_arr[order]);
 	}
+	limit = *(ft_limitchr(stacks[0], -1, -1)->content);
+	while (ft_checksort_lst(stacks[0], -1))
+	{
+		order = ft_get_distance(stacks[0], limit);
+		if (ft_execute(order, stacks))
+			ft_printf("%s\n", order_arr[order]);	
+	}
 }
 
+/*	Returns the most eficient pair of orders needed to sort both stacks.	*/
+/*	- The orders are recover from executing Bubblesort and Insertionsort,	*/
+/*	  in combination with other logical factors.							*/
 static int	ft_orders(t_list **stacks, int *order_b, int *pivot)
 {
 	t_list	*tmp;
@@ -65,27 +74,35 @@ static int	ft_orders(t_list **stacks, int *order_b, int *pivot)
 	int		next_nbr;
 
 	order_a = NO_ORDER;
-	tmp = ft_lstnext_nbr(stacks[0], *(pivot), -1);
+	tmp = ft_nextnbr_chr(stacks[0], *(pivot), -1);
 	if (!tmp)
-		tmp = ft_lstnext_nbr(stacks[0], ft_pvtchr(stacks[0], stacks[0]), -1);
-	if (ft_check_sort(stacks[0], -1))
+		tmp = ft_nextnbr_chr(stacks[0], ft_pvtchr(stacks[0], stacks[0]), -1);
+	if (ft_checksort_lst(stacks[0], -1))
 	{
 		next_nbr = *(tmp->content);
 		if ((*(stacks[0]->content)) < (*pivot) || *(stacks[0]->content) == next_nbr)
 			order_a = PB_ORDER;
 		else
-			order_a = ft_insertionsort(stacks[0], next_nbr, 1, 0);
+			order_a = RA_ORDER;
 		if ((*(stacks[0]->content)) == (*pivot))
 			(*pivot) = ft_pvtchr(stacks[0], stacks[0]);
 	}
-	*(order_b) = ft_insertionsort(stacks[1], next_nbr, 1, 1);
+	*(order_b) = ft_insertionsort(stacks[1], next_nbr, -1, 1);
 	if (*(order_b) > NO_ORDER && order_a == PB_ORDER)
 		order_a = NO_ORDER;
-	if (order_a < 0 && *(order_b) < 0 && ft_check_sort(stacks[1], 1))
-		*(order_b) = RRB_ORDER;
+	if (order_a > NO_ORDER && *(order_b) == PB_ORDER)
+		*(order_b) = NO_ORDER;
 	return (order_a);
 }
 
+/*	Sorts a stack of a numeric T_LIST ** with an order solution eficiency	*/
+/*	from: O(n^2) to O(n log (n)).											*/
+/*	- To sort the stack it will split it with a middle pivot and push every */
+/*	  minimum number found to the second stack, using Insertionsort to		*/
+/*	  secure the correct sorting. It will repeat this process everytime	the	*/
+/*	  pivot is pushed, becoming more efficient after each repetition.		*/
+/*  - Notice that the first order solution eficiency increases exponencialy	*/
+/*	  with the amount of values.											*/
 void	ft_quicksort(t_list **stacks, char **order_arr)
 {
 	int	pivot;
@@ -93,7 +110,7 @@ void	ft_quicksort(t_list **stacks, char **order_arr)
 	int	order_b;
 
 	pivot = ft_pvtchr(stacks[0], stacks[0]);
-	while (((ft_check_sort(stacks[0], -1)) || ft_check_sort(stacks[1], 1)))
+	while (((ft_checksort_lst(stacks[0], -1)) || ft_checksort_lst(stacks[1], 1)))
 	{
 		order_a = ft_orders(stacks, &order_b, &pivot);
 		if (order_a == order_b - 3)

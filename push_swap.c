@@ -6,15 +6,15 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/12 20:32:02 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/19 20:35:34 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-/* Verifies the proper format of the inputed values; If values are valid,	*/
-/* it initializes the stack of numbers as T_LIST ** array. 					*/
-/* - Returns NULL in case of error or non valid values.						*/
+/*	Verifies the proper format of the inputed values; If values are valid,	*/
+/*	it initializes the stack of numbers on a numeric T_LIST ** structure.	*/
+/*	- Returns NULL in case of error or non valid values.					*/
 static	t_list	**ft_stack_ini(char **argv, int **ptr)
 {
 	t_list	**stack;
@@ -42,9 +42,9 @@ static	t_list	**ft_stack_ini(char **argv, int **ptr)
 	return (stack);
 }
 
-/* Push_swap is a program dedicated to sort an array of integers numbers	*/
-/* without duplicates, using only two stacks and limited movement 			*/
-/* instructions, giving a O(n^2) deterministic solution.					*/
+/*	Push_swap is a program dedicated to sort an array of integers numbers	*/
+/*	without duplicates, using only two stacks and limited movement 			*/
+/*	instructions.															*/
 int	main(int argc, char **argv) 
 {
 	t_list	**stacks;
@@ -65,6 +65,7 @@ int	main(int argc, char **argv)
 		ft_quicksort(stacks, order_arr);
 	else
 		ft_timsort(stacks, order_arr);
+	ft_print_stack(stacks);
 	ft_stack_free(ptr, stacks);
 	ft_split_free(order_arr);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/12 19:07:08 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/19 19:58:44 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,59 +40,56 @@ void	ft_print_stack(t_list **stacks)
 	ft_prints(&stacks[1]);
 }
 
-//returns either the maximum or minimum number on the stack.
-//Use positive orientation for the maximum.
-//Use negative orientation for the minimum. 
-int	ft_getlimit_nbr(t_list *stack, int orientation)
+/*	Finds and returns the next numeric T_LIST * structure, with a 			*/
+/*	lesser or higher value than nbr.										*/
+/*	- Use a positive orientation for higher numbers.						*/
+/*	- Use a negative orientation for lesser numbers.						*/
+/*	- Returns NULL if no valid number was found.							*/
+t_list	*ft_nextnbr_chr(t_list *stack, int nbr, int dir)
 {
-	t_list	*tmp;
-	int		nbr;
-
-	tmp = stack;
-	nbr = *(tmp->content);
-	while (tmp)
+	while (stack)
 	{
-		if (orientation < 0)
-			if (nbr > *(tmp->content))
-				return (ft_getlimit_nbr(tmp, orientation));
-		if (orientation >= 0)
-			if (nbr < *(tmp->content))
-				return (ft_getlimit_nbr(tmp, orientation));
-		tmp = tmp->next;
+		if (dir < 0)
+			if (*(stack[0].content) < nbr)
+				return (stack);
+		if (dir >= 0)
+			if (*(stack[0].content) > nbr)
+					return (stack);
+		stack = stack->next;
 	}
-	return (nbr);
+	return (NULL);
 }
 
-/* Checks if a T_LIST *, of integers content, is sorted.					*/
-/* - Returns 0 if true. 1 if false.											*/
-/* - Notice that an empty list is a sorted one.								*/
-/* - Positive orientation checks max to min sort.							*/
-/* - Negative orientation checks min to max sort.							*/
-int	ft_check_sort(t_list *stacks, int orientation)
+/*	Checks if a numeric T_LIST * structure is sorted.						*/
+/*	- Positive direction checks max to min sort.							*/
+/*	- Negative direction checks min to max sort.							*/
+/*	- Returns the amount of sort errors found on the stack, 0 equals sorted.*/
+/*	- Notice that an empty list is a sorted one.							*/
+int	ft_checksort_lst(t_list *stack, int dir)
 {
 	int	nbr_i;
 	int	nbr_j;
 	int	ans;
 	
 	ans = 0;
-	if (!stacks || ft_lstsize(stacks) <= 1)
+	if (!stack || ft_lstsize(stack) <= 1)
 		return (ans);
-	while (stacks)
+	while (stack)
 	{
-		nbr_i = *(stacks->content);
-		if (stacks->next)
-			nbr_j = *(stacks->next->content);
-		if (orientation < 0 && nbr_i > nbr_j)
+		nbr_i = *(stack->content);
+		if (stack->next)
+			nbr_j = *(stack->next->content);
+		if (dir < 0 && nbr_i > nbr_j)
 			ans++;
-		if (orientation >= 0 && nbr_i < nbr_j)
+		if (dir >= 0 && nbr_i < nbr_j)
 			ans++;
-		stacks = stacks->next;
+		stack = stack->next;
 	}
 	return (ans);
 }
 
-/* Executes a given instruction and prints it on stdout.					*/
-/* - If the instruction isn't valid, returns -1.							*/
+/*	Executes a given instruction.											*/
+/*	- If the instruction isn't valid, returns 0.							*/
 int	ft_execute(int instruction, t_list **stacks)
 {
 	if (instruction == SA_ORDER)
@@ -118,4 +115,17 @@ int	ft_execute(int instruction, t_list **stacks)
 	else if (instruction == RRR_ORDER)
 		return (ft_double_ins(ft_reverse_rotate, &stacks[0], &stacks[1]));
 	return (0);
+}
+
+int	ft_get_distance(t_list *stack, int nbr)
+{
+	int	count;
+	
+	count = 0;
+	while (*(stack->content) != nbr)
+	{
+		count++;
+		stack = stack->next;
+	}
+	return (count);
 }

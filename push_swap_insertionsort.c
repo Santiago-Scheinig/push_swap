@@ -6,95 +6,144 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 20:28:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/12 18:51:32 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/19 21:21:43 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-static int	ft_inverse_getin_position(t_list *stack, int nbr, int orientation)
+
+static int	ft_inverse_getpos(t_list *stack, int nbr, int run)
 {
 	t_list	*tmp;
-	t_list	*origin;
-	int		count;
-	int		stack_len;
+	int		i;
+	int		size;
 
-	count = 0;
-	origin = stack;
+	i = 0;
+	size = ft_runsize(stack, run);
+	stack = ft_runchr(stack, run, &i);
 	tmp = ft_lstlast(stack);
-	stack_len = ft_lstsize(stack);
-	while (stack && (nbr > (*(stack->content)) || nbr < (*(tmp->content))))
+	if (run != -1 && tmp->run != run)
 	{
-		count++;
 		tmp = stack;
 		stack = stack->next;
 	}
-	if (!count)
-		return (NO_ORDER); 
-	if (count == stack_len)
-		return (ft_islimit(origin, nbr, orientation));
-	if (count > (stack_len / 2))
-		return (RRA_ORDER);
-	return (RA_ORDER);
-}
-
-int	ft_getin_position(t_list *stack, int nbr, int orientation)
-{
-	t_list *tmp;
-	t_list *origin;
-	int		count;
-	int		stack_len;
-
-	if (orientation < 0)
-		return (ft_inverse_getin_position(stack, nbr, orientation));
-	count = 0;
-	origin = stack;
-	tmp = ft_lstlast(stack);
-	stack_len = ft_lstsize(stack);
-	while (stack && (nbr < (*(stack->content)) || nbr > (*(tmp->content))))
+	while ((nbr > *(stack->content) || nbr < *(tmp->content)) && ++i != size)
 	{
-		count++;
 		tmp = stack;
 		stack = stack->next;
+		if (run != -1 && tmp->run != run)
+			tmp = ft_runchr(tmp, run, &i);
+		if (!stack)
+			break ;
 	}
-	if (!count)
-		return (NO_ORDER);
-	if (count == stack_len)
-		return (ft_islimit(origin, nbr, orientation));
-	else if (count > (stack_len / 2))
-		return (RRA_ORDER);
-	return (RA_ORDER);
+	return (i);
 }
 
-int	ft_islimit(t_list *stack, int nbr, int orientation)
+static int	ft_getpos(t_list *stack, int nbr, int run)
 {
-	int	ans;
+	t_list	*tmp;
+	int		i;
+	int		size;
 
-	if (ft_check_sort(stack, orientation))
+	i = 0;
+	size = ft_runsize(stack, run);
+	stack = ft_runchr(stack, run, &i);
+	tmp = ft_lstlast(stack);
+	if (run != -1 && tmp->run != run)
 	{
-		ans = ft_getin_position(stack, ft_getlimit_nbr(stack, orientation), orientation);
-		if (ans == NO_ORDER)
-			return (RRA_ORDER);
-		return (ans);
+		tmp = stack;
+		stack = stack->next;
+		i++;
 	}
-	if (orientation >= 0 && nbr > *(stack->content))
-		return (PA_ORDER);
-	else if (nbr < *(stack->content))
-		return (PA_ORDER);
-	return (NO_ORDER);
+	ft_printf("SIZE |%i|\n", size);
+	ft_printf("PREV |%i| - NBR |%i| - NEXT |%i|\n", *(tmp->content), nbr, *(stack->content));
+	while ((nbr < *(stack->content) || nbr > *(tmp->content)) &&  ++i != size)
+	{
+		tmp = stack;
+		stack = stack->next;
+		ft_printf("PREV |%i| - NBR |%i| - NEXT |%i|\n", *(tmp->content), nbr, *(stack->content));
+		if (run != -1 && tmp->run != run)
+			tmp = ft_runchr(tmp, run, &i);
+		if (!stack)
+			break ;
+	}
+	ft_printf("COUNT |%i|\n", i);
+	return (i);
 }
 
-int	ft_insertionsort(t_list *stack_des, int nbr, int orientation, int column)
+int	ft_isrun_limit(t_list *stack, int run, int  dir)
+{
+	int	limit;
+	int ans;
+
+	ft_printf("ISLIMIT!]\n");
+	limit = *(ft_limitchr(stack, run, dir)->content);
+	ft_printf("LIMIT |%i|\n", limit);
+	if (dir >= 0 && *(stack->content) < limit)
+		limit = *(ft_limitchr(stack, run, dir * -1)->content);
+	if (dir < 0 && *(stack->content) > limit)
+		limit = *(ft_limitchr(stack, run, dir * -1)->content);
+	if (*(stack->content) != limit)
+	{
+		ans = ft_get_distance(stack, limit);
+		if (ans > ft_lstsize(stack))
+			ans = RA_ORDER;
+		else
+			ans = RRA_ORDER;
+	}
+	else
+		ans = PA_ORDER;
+	return (ans);
+}
+
+int	ft_is_limit(t_list *stack, int run, int dir)
+{
+	int		limit;
+	int		ans;
+
+	ft_printf("INSERTION SIZE |%i|\n", ft_runsize(stack, run));
+	if (run != -1)
+		return (ft_isrun_limit(stack, run, dir));
+	if (dir < 0)
+		limit = *(ft_limitchr(stack, run, dir)->content);
+	if (dir >= 0)
+		limit = *(ft_limitchr(stack, run, dir)->content);
+	if (*(stack->content) != limit)
+	{
+		ans = ft_get_distance(stack, limit);
+		if (ans > ft_lstsize(stack))
+			ans = RA_ORDER;
+		else
+			ans = RRA_ORDER;
+	}
+	else
+		ans = PA_ORDER;
+	return (ans);
+}
+
+int	ft_insertionsort(t_list *stack_des, int nbr, int run, int dir)
 {
 	int	ans;
 	
 	if (!stack_des || ft_lstsize(stack_des) == 1)
-		return (NO_ORDER);
-	ans = ft_getin_position(stack_des, nbr, orientation);
-	if (column)
+		return (PB_ORDER);
+	if (dir < 0)
+		ans = ft_inverse_getpos(stack_des, nbr, run);
+	else
+		ans = ft_getpos(stack_des, nbr, run);
+	if (!ans)
+		ans = PA_ORDER;
+	else if (ans == ft_runsize(stack_des, run))
+		ans = ft_is_limit(stack_des, run, dir);		
+	else if (ans > (ft_lstsize(stack_des) / 2))
+		ans = RRA_ORDER;
+	else
+		ans = RA_ORDER;		
+	if (dir >= 0)
 	{
 		if (ans == RA_ORDER || ans == RRA_ORDER)
 			ans += 3;
-		if (ans == PA_ORDER)
+		else
 			ans++;
 	}
 	return (ans);

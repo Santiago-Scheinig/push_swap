@@ -6,12 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:45:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/12 19:39:55 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:08:49 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+/* Sorts a stack of numeric T_list * from maximum to maximum, with a 		*/
+/* O(n) order solution.														*/
 static int	ft_inverse_orders(t_list *stack)
 {
 	int	nbr_i;
@@ -33,6 +35,8 @@ static int	ft_inverse_orders(t_list *stack)
 	return (SB_ORDER);
 }
 
+/* Sorts a stack of numeric T_list * from minimum to maximum, with a 		*/
+/* O(n) order solution.														*/
 static int	ft_orders(t_list *stack, int orientation)
 {
 	int	nbr_i;
@@ -56,29 +60,32 @@ static int	ft_orders(t_list *stack, int orientation)
 	return (SA_ORDER);
 }
 
-/* Sorts a numeric T_LIST * with a O(n) order solution.						*/
-/* - Use negative orientation to sort from min to max.						*/
-/* - Use positive orientation to sort from max to min.						*/
-/* - If the T_LIST * size <= 3 it will execute all orders needed to sort	*/
-/*   the stack. Finally, returns NO_ORDER.									*/
-/* - If the T_LIST * size >= 4 it will instead return an order if it's		*/
-/*   SA_ORDER or SB_ORDER. Otherwise, returns NO_ORDER. 					*/
-int	ft_bubblesort(t_list **stacks, char **order_arr, int orientation, int column)
+/*	Sorts an individual stack of a numeric T_LIST ** with a					*/
+/*	O(n) order solution.													*/
+/*  - Use column to define the stack to be sorted.							*/
+/*	- Use negative direction to sort from minimum to maximum.				*/
+/*	- Use positive direction to sort from maximum to minimum.				*/
+/*	- If the T_LIST * size <= 3 it will execute all orders needed to sort	*/
+/*	  the stack. Finally returning NO_ORDER.								*/
+/*	- If the T_LIST * size >= 4 it will instead return an order if it's		*/
+/*	  SA_ORDER or SB_ORDER. Otherwise, returns NO_ORDER. 					*/
+/*	- Notice that in the last case, no orders will be executed.				*/
+int	ft_bubblesort(t_list **stacks, char **order_lst, int dir, int col)
 {
 	int	order;
 
 	order = NO_ORDER;
-	while (ft_check_sort(stacks[column], orientation))
+	while (ft_checksort_lst(stacks[col], dir))
 	{
-		order = ft_orders(stacks[column], orientation);
-		if (ft_lstsize(stacks[column]) > 3)
+		order = ft_orders(stacks[col], dir);
+		if (ft_lstsize(stacks[col]) > 3)
 		{
 			if (order == SA_ORDER || order == SB_ORDER)
 				return (order);
 			break ;
 		}
 		if (ft_execute(order, stacks))
-			ft_printf("%s\n", order_arr[order]);
+			ft_printf("%s\n", order_lst[order]);
 	}
 	return (NO_ORDER);
 }

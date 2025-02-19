@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:18 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/05 15:03:50 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:37:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-/* Swaps the first two elements of the stack passed as argument.			*/
-/* - If executed correctly, returns 1. Else, returns 0.						*/
+/* 	Swaps the first two elements of the stack passed as argument.			*/
+/* 	- If executed correctly, returns 1. Else, returns 0.					*/
 int	ft_swap(t_list **stack)
 {
 	int	*aux;
@@ -26,8 +26,8 @@ int	ft_swap(t_list **stack)
 	return (1);
 }
 
-/* Pushes the first element from stack_src to stack_des as it's first.		*/
-/* - If executed correctly, returns 1. Else, returns 0.						*/
+/* 	Pushes the first element from stack_src to stack_des as it's first.		*/
+/* 	- If executed correctly, returns 1. Else, returns 0.					*/
 int ft_push(t_list	**stack_src, t_list **stack_des)
 {
 	t_list	*aux;
@@ -49,9 +49,9 @@ int ft_push(t_list	**stack_src, t_list **stack_des)
 	return (1);
 }
 
-/* Rotates every element on the stack one position up, making the first		*/
-/* element it's last.														*/
-/* - If executed correctly, returns 1. Else, returns 0.						*/
+/*	Rotates every element on the stack one position up, making the first	*/
+/*	element it's last.														*/
+/* 	- If executed correctly, returns 1. Else, returns 0.					*/
 int	ft_rotate(t_list **stack)
 {
 	t_list	*aux;
@@ -65,9 +65,9 @@ int	ft_rotate(t_list **stack)
 	return (1);
 }
 
-/* Rotates every element on the stack one position down, making the last	*/
-/* element it's first.														*/
-/* - If executed correctly, returns 1. Else, returns 0.						*/
+/* 	Rotates every element on the stack one position down, making the last	*/
+/* 	element it's first.														*/
+/* 	- If executed correctly, returns 1. Else, returns 0.					*/
 int	ft_reverse_rotate(t_list **stack)
 {
 	t_list	*aux;
@@ -86,9 +86,9 @@ int	ft_reverse_rotate(t_list **stack)
 	return (1);
 }
 
-/* Executes the instruction sent as argument one time with both stack_a		*/
-/* and stack_b.																*/
-/* - If executed correctly, returns 1. Else, returns 0.						*/
+/*	Executes the instruction sent as argument one time with both stack_a	*/
+/*	and stack_b.															*/
+/*	- If executed correctly, returns 1. Else, returns 0.					*/
 int ft_double_ins(int (*ins)(t_list **), t_list **stack_a, t_list **stack_b)
 {
 	if (!(*stack_a) || !(*stack_a)->next)
