@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:35:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/19 20:36:49 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:29:04 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static void	ft_merge(t_list **stacks, char **order_arr)
 	int	limit;
 	int	order;
 	
+	ft_printf("MERGE");
 	while (stacks[1])
 	{
 		order = ft_insertionsort(stacks[0], *(stacks[1]->content), -1, -1);
@@ -58,7 +59,7 @@ static void	ft_merge(t_list **stacks, char **order_arr)
 	limit = *(ft_limitchr(stacks[0], -1, -1)->content);
 	while (ft_checksort_lst(stacks[0], -1))
 	{
-		order = ft_get_distance(stacks[0], limit);
+		order = ft_get_distance(stacks[0], limit, 1);
 		if (ft_execute(order, stacks))
 			ft_printf("%s\n", order_arr[order]);	
 	}
@@ -76,21 +77,22 @@ static int	ft_orders(t_list **stacks, int *order_b, int *pivot)
 	order_a = NO_ORDER;
 	tmp = ft_nextnbr_chr(stacks[0], *(pivot), -1);
 	if (!tmp)
-		tmp = ft_nextnbr_chr(stacks[0], ft_pvtchr(stacks[0], stacks[0]), -1);
+		tmp = stacks[0];
 	if (ft_checksort_lst(stacks[0], -1))
 	{
 		next_nbr = *(tmp->content);
+		ft_printf("NEXT NBR QUICKSORT |%i|\n", next_nbr);
 		if ((*(stacks[0]->content)) < (*pivot) || *(stacks[0]->content) == next_nbr)
 			order_a = PB_ORDER;
 		else
 			order_a = RA_ORDER;
 		if ((*(stacks[0]->content)) == (*pivot))
 			(*pivot) = ft_pvtchr(stacks[0], stacks[0]);
+		*(order_b) = ft_insertionsort(stacks[1], next_nbr, -1, 1);
 	}
-	*(order_b) = ft_insertionsort(stacks[1], next_nbr, -1, 1);
 	if (*(order_b) > NO_ORDER && order_a == PB_ORDER)
 		order_a = NO_ORDER;
-	if (order_a > NO_ORDER && *(order_b) == PB_ORDER)
+	if (order_a == PB_ORDER && *(order_b) == PB_ORDER)
 		*(order_b) = NO_ORDER;
 	return (order_a);
 }
@@ -108,10 +110,14 @@ void	ft_quicksort(t_list **stacks, char **order_arr)
 	int	pivot;
 	int	order_a;
 	int	order_b;
+	int	loop;
 
+	loop = 0;
 	pivot = ft_pvtchr(stacks[0], stacks[0]);
-	while (((ft_checksort_lst(stacks[0], -1)) || ft_checksort_lst(stacks[1], 1)))
+	while (((ft_checksort_lst(stacks[0], -1)) || ft_checksort_lst(stacks[1], 1)) && ++loop < 10)
 	{
+		ft_print_stack(stacks);
+		order_b = NO_ORDER;
 		order_a = ft_orders(stacks, &order_b, &pivot);
 		if (order_a == order_b - 3)
 		{
@@ -124,7 +130,7 @@ void	ft_quicksort(t_list **stacks, char **order_arr)
 		if (ft_execute(order_b, stacks))
 			ft_printf("%s\n", order_arr[order_b]);
 		if (ft_lstsize(stacks[0]) <= 3)
-			ft_bubblesort(stacks, order_arr, -1, 0);
+			ft_bubblesort(stacks, order_arr, 0, 0);
 	}
 	ft_merge(stacks, order_arr);
 }

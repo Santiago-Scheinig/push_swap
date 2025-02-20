@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:46:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/19 20:00:51 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/20 18:58:02 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,19 +117,21 @@ int		ft_swap(t_list **stack);
 
 void	ft_quicksort(t_list **stacks, char **order_lst);
 
+void	ft_mergesort(t_list **stacks, char **order_lst);
+
 void	ft_timsort(t_list **stacks, char **order_lst);
 
 /*	Sorts an individual stack of a numeric T_LIST ** with a					*/
 /*	O(n) order solution.													*/
-/*  - Use column to define the stack to be sorted.							*/
-/*	- Use negative direction to sort from minimum to maximum.				*/
-/*	- Use positive direction to sort from maximum to minimum.				*/
-/*	- If the T_LIST * size <= 3 it will execute all orders needed to sort	*/
-/*	  the stack. Finally returning NO_ORDER.								*/
-/*	- If the T_LIST * size >= 4 it will instead return an order if it's		*/
-/*	  SA_ORDER or SB_ORDER. Otherwise, returns NO_ORDER. 					*/
-/*	- Notice that in the last case, no orders will be executed.				*/
-int		ft_bubblesort(t_list **stacks, char **order_lst, int dir, int col);
+/*  - Use column to indicate which stack to sort. STACK A | 0 is sorted 	*/
+/*	  minimum to maximum, STACK B | 1 is sorted maximum to minimum.			*/
+/*	- For loop <= 3, the algorithm will execute 3 orders to sort the 		*/
+/*	  indicated stack. If the amount of digits is less than 3, it will push */
+/*	  an extra digit from the opossite stack.								*/
+/*	- Use loop > 3 to indicate the amount of extra numbers to push from the	*/
+/*	  opposite stack, and sort in the indicated one.						*/
+/*	- Notice that for stacks of size > 3 sort is not guaranteed.			*/
+void	ft_bubblesort(t_list **stacks, char **order_lst, int col, int loop);
 
 int	ft_insertionsort(t_list *stack_des, int nbr, int run, int dir);
 
@@ -148,7 +150,7 @@ t_list	*ft_runchr(t_list *stack, int run, int *count);
 
 t_list	*ft_nextnbr_chr(t_list *stack, int nbr, int dir);
 
-int	ft_get_distance(t_list *stack, int nbr);
+int	ft_get_distance(t_list *stack, int nbr, int i);
 
 int	ft_setruns(t_list *stack, int start, int dir);
 
@@ -161,7 +163,7 @@ int	ft_islimit(t_list *stack, int nbr, int dir, int run);
 /*	- Negative direction checks min to max sort.							*/
 /*	- Returns the amount of sort errors found on the stack, 0 equals sorted.*/
 /*	- Notice that an empty list is a sorted one.							*/
-int	ft_checksort_lst(t_list *stack, int dir);
+int	ft_checksort_lst(t_list *stack, int col);
 
 int	ft_checksort_run(t_list *stack, int dir, int run);
 /////

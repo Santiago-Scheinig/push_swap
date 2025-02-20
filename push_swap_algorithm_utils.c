@@ -6,40 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:08:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/19 20:53:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/20 21:00:04 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	ft_checksort_run(t_list *stack, int dir, int run)
-{
-	t_list	*tmp;
-	int		ans;
-	
-	ans = 0;
-	if (!stack || ft_lstsize(stack) <= 1)
-		return (ans);
-	while (stack && stack->run != run)
-		stack = stack->next;
-	while (stack)
-	{
-		if (stack->next)
-			tmp = stack->next;
-		if (dir < 0 && *(stack->content) > *(tmp->content))
-			ans++;
-		if (dir >= 0 && *(stack->content) < *(tmp->content))
-			ans++;
-		stack = stack->next;
-	}
-	while (stack)
-	{
-		if (stack->run == run)
-			ans++;
-		stack = stack->next;
-	}
-	return (ans);
-}
 
 int	ft_setruns(t_list *stack, int start, int dir)
 {
@@ -75,8 +47,6 @@ int	ft_runsize(t_list *stack, int run)
 	int	count;
 	
 	count = 0;
-	if (run == -1)
-		return (ft_lstsize(stack));
 	while (stack)
 	{
 		if (stack->run == run)
@@ -110,13 +80,17 @@ t_list	*ft_runchr(t_list *stack, int run, int *count)
 /*	- Use run -1 to find the limit number of the whole stack instead.		*/
 t_list	*ft_limitchr(t_list *stack, int run, int dir)
 {
+	int	count;
 	t_list	*tmp;
 	t_list	*nbr;
 
-	tmp = stack;
-	nbr = tmp;
+	count = 0;
+	nbr = ft_runchr(stack, run, &count);
+	tmp = nbr->next;
 	while (tmp)
 	{
+		if (run == -1)
+			tmp->run = -1;
 		if (dir < 0)
 			if (*(nbr->content) > *(tmp->content) && tmp->run == run)
 				return (ft_limitchr(tmp, run, dir));

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/19 19:58:44 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/20 20:51:42 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_list	*ft_nextnbr_chr(t_list *stack, int nbr, int dir)
 /*	- Negative direction checks min to max sort.							*/
 /*	- Returns the amount of sort errors found on the stack, 0 equals sorted.*/
 /*	- Notice that an empty list is a sorted one.							*/
-int	ft_checksort_lst(t_list *stack, int dir)
+int	ft_checksort_lst(t_list *stack, int col)
 {
 	int	nbr_i;
 	int	nbr_j;
@@ -79,9 +79,9 @@ int	ft_checksort_lst(t_list *stack, int dir)
 		nbr_i = *(stack->content);
 		if (stack->next)
 			nbr_j = *(stack->next->content);
-		if (dir < 0 && nbr_i > nbr_j)
+		if (!col && nbr_i > nbr_j)
 			ans++;
-		if (dir >= 0 && nbr_i < nbr_j)
+		if (col && nbr_i < nbr_j)
 			ans++;
 		stack = stack->next;
 	}
@@ -117,14 +117,19 @@ int	ft_execute(int instruction, t_list **stacks)
 	return (0);
 }
 
-int	ft_get_distance(t_list *stack, int nbr)
+int	ft_get_distance(t_list *stack, int nbr, int dir)
 {
 	int	count;
-	
+
 	count = 0;
+	if (dir < 0)
+		count = ft_lstsize(stack);
 	while (*(stack->content) != nbr)
 	{
-		count++;
+		if (dir < 0)
+			count--;
+		else
+			count++;
 		stack = stack->next;
 	}
 	return (count);
