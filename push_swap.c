@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/20 20:10:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/25 22:39:34 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static	t_list	**ft_stack_ini(char **argv, int **ptr)
 	return (stack);
 }
 
-/*	Push_swap is a program dedicated to sort an array of integers numbers	*/
+/*	Push_swap is a program dedicated to sort an array of integers numbers,	*/
 /*	without duplicates, using only two stacks and limited movement 			*/
 /*	instructions.															*/
 int	main(int argc, char **argv) 
@@ -62,7 +62,7 @@ int	main(int argc, char **argv)
 	if (stack_len <= 3)
 		ft_bubblesort(stacks, order_arr, 0, -1);
 	else if (stack_len <= 64)
-		ft_quicksort(stacks, order_arr);
+		ft_quicksort(stacks, order_arr, 0);
 	else
 		ft_timsort(stacks, order_arr);
 	//ft_print_stack(stacks);

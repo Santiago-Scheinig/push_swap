@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:46:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/20 18:58:02 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/25 19:25:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,9 +115,9 @@ int		ft_swap(t_list **stack);
 /*--------------------------------ALGORITHMS--------------------------------*/
 /*--------------------------------------------------------------------------*/
 
-void	ft_quicksort(t_list **stacks, char **order_lst);
+void	ft_quicksort(t_list **stacks, char **order_lst, int runlen);
 
-void	ft_mergesort(t_list **stacks, char **order_lst);
+void	ft_mergesort(t_list **stacks, char **order_lst, int col_src);
 
 void	ft_timsort(t_list **stacks, char **order_lst);
 
@@ -148,7 +148,7 @@ t_list	*ft_limitchr(t_list *stack, int run, int dir);
 
 t_list	*ft_runchr(t_list *stack, int run, int *count);
 
-t_list	*ft_nextnbr_chr(t_list *stack, int nbr, int dir);
+t_list	*ft_nextnbr(t_list *stack, int *exe, int run);
 
 int	ft_get_distance(t_list *stack, int nbr, int i);
 
@@ -157,6 +157,8 @@ int	ft_setruns(t_list *stack, int start, int dir);
 int	ft_runsize(t_list *stack, int run);
 
 int	ft_islimit(t_list *stack, int nbr, int dir, int run);
+
+int	ft_translate(int order);
 
 /*	Checks if a numeric T_LIST * structure is sorted.						*/
 /*	- Positive direction checks max to min sort.							*/
@@ -168,5 +170,7 @@ int	ft_checksort_lst(t_list *stack, int col);
 int	ft_checksort_run(t_list *stack, int dir, int run);
 /////
 void	ft_print_stack(t_list **stack);
+
+void	ft_printruns(t_list	*stack);
 
 #endif

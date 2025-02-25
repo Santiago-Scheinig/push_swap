@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 20:28:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/20 21:35:33 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/25 22:39:21 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,10 @@ static int	ft_isrun_limit(t_list *stack, int nbr, int run, int  dir)
 	}
 	if (*(limit_pos->content) != limit)
 	{
-		if (ans <= ft_lstsize(stack) / 2)
-			ans = RA_ORDER;
-		else
+		if (ans > ft_lstsize(stack) / 2)
 			ans = RRA_ORDER;
+		else
+			ans = RA_ORDER;
 	}
 	else
 		ans = PA_ORDER;
@@ -129,7 +129,7 @@ int	ft_insertionsort(t_list *stack_des, int nbr, int run, int dir)
 {
 	int	ans;
 	
-	if (!stack_des || ft_lstsize(stack_des) == 1)
+	if (!stack_des || ft_lstsize(stack_des) == 1 || !ft_runsize(stack_des, run))
 		return (PA_ORDER);
 	if (dir < 0)
 		ans = ft_inverse_getpos(stack_des, nbr, run);
@@ -142,13 +142,6 @@ int	ft_insertionsort(t_list *stack_des, int nbr, int run, int dir)
 	else if (ans > (ft_lstsize(stack_des) / 2))
 		ans = RRA_ORDER;
 	else
-		ans = RA_ORDER;		
-	if (dir >= 0)
-	{
-		if (ans == RA_ORDER || ans == RRA_ORDER)
-			ans += 3;
-		else
-			ans++;
-	}
+		ans = RA_ORDER;
 	return (ans);
 }

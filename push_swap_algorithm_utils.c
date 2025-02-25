@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:08:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/20 21:00:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/25 22:22:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,6 @@ int	ft_runsize(t_list *stack, int run)
 
 t_list	*ft_runchr(t_list *stack, int run, int *count)
 {
-	t_list	*origin;
-
-	origin = stack;
 	if (run == -1)
 		return (stack);
 	while (stack && stack->run != run)
@@ -68,8 +65,6 @@ t_list	*ft_runchr(t_list *stack, int run, int *count)
 		stack = stack->next;
 		*(count) = *(count) + 1;
 	}
-	if (!stack)
-		return (origin);
 	return (stack);
 }
 

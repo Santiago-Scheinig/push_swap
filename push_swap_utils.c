@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/20 20:51:42 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/25 21:30:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,78 @@ void	ft_print_stack(t_list **stacks)
 	ft_prints(&stacks[1]);
 }
 
-/*	Finds and returns the next numeric T_LIST * structure, with a 			*/
-/*	lesser or higher value than nbr.										*/
-/*	- Use a positive orientation for higher numbers.						*/
-/*	- Use a negative orientation for lesser numbers.						*/
-/*	- Returns NULL if no valid number was found.							*/
-t_list	*ft_nextnbr_chr(t_list *stack, int nbr, int dir)
+int	ft_translate(int order)
 {
+	if (order == SA_ORDER || order == RA_ORDER || order == RRA_ORDER)
+		order += 3;
+	else if (order == SB_ORDER || order == RB_ORDER || order == RRB_ORDER)
+		order -= 3;
+	else if (order == PA_ORDER)
+		order++;
+	else if (order == PB_ORDER)
+		order--;
+	return (order);
+}
+
+/*	Returns the most efficient order to get, on first position, the next 	*/
+/*	number of the indicated run.											*/
+/*	- If there are no numbers with the indicated run, or there's a number	*/
+/*	  with the indicated run on the first position, returns NO_ORDER.		*/
+static int ft_distance_order(t_list *stack, int run)
+{
+	int	count;
+	int	count_aux;
+	
+	count = 0;
+	count_aux = 0;
 	while (stack)
 	{
-		if (dir < 0)
-			if (*(stack[0].content) < nbr)
-				return (stack);
-		if (dir >= 0)
-			if (*(stack[0].content) > nbr)
-					return (stack);
+		if (stack->run == run)
+			break;
+		stack = stack->next;
+		count++;
+	}
+	while (stack)
+	{
+		count_aux++;
+		if (stack->run == run)
+			count_aux = 0;
 		stack = stack->next;
 	}
-	return (NULL);
+	if (!count || count == ft_lstsize(stack))
+		return (NO_ORDER);
+	if (count_aux < count)
+		return (RRA_ORDER);
+	return (RA_ORDER);
+}
+
+t_list	*ft_nextnbr(t_list *stack, int *exe, int run)
+{
+	t_list	*nbr;
+	int		dir;
+
+	dir = 1;
+	nbr = NULL;
+	*(exe) = ft_distance_order(stack, run);
+	if (*(exe) == NO_ORDER)
+		return  (stack);
+	if (*(exe) == RRA_ORDER)
+		dir *= -1;
+	while (stack && dir >= 0)
+	{
+		nbr = stack;
+		stack = stack->next;
+		if (stack && stack->run != run)
+			continue;
+		break;
+	}	
+	while (stack && dir < 0)
+	{
+		if (stack->run == run)
+			nbr = stack;
+		stack = stack->next;
+	}
+	return (nbr);
 }
 
 /*	Checks if a numeric T_LIST * structure is sorted.						*/
@@ -88,7 +142,18 @@ int	ft_checksort_lst(t_list *stack, int col)
 	return (ans);
 }
 
-/*	Executes a given instruction.											*/
+/*	Executes a given instruction:											*/
+/*	||	PA_ORDER == 0														*/
+/*	||	PB_ORDER == 1														*/
+/*	||	SA_ORDER == 2														*/
+/*	||	RA_ORDER == 3														*/
+/*	||	RRA_ORDER == 4														*/
+/*	||	SB_ORDER == 5														*/
+/*	||	RB_ORDER == 6														*/
+/*	||	RRB_ORDER == 7														*/
+/*	||	SS_ORDER == 8														*/
+/*	||	RR_ORDER == 9														*/
+/*	||	RRR_ORDER == 10														*/
 /*	- If the instruction isn't valid, returns 0.							*/
 int	ft_execute(int instruction, t_list **stacks)
 {

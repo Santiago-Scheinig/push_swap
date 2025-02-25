@@ -6,11 +6,23 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:35:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/20 17:29:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/25 22:41:20 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+static void	ft_set_pvtrun(t_list *stack, int pivot)
+{
+	while (stack)
+	{
+		if (*(stack->content) < pivot)
+			stack->run = -1;
+		else if (*(stack->content) >= pivot)
+			stack->run = 1;
+		stack = stack->next;
+	}
+}
 
 /*	Returns the middle pivot of a numeric T_LIST * with a O(n^2) space		*/
 /*	complexity.																*/
@@ -37,64 +49,42 @@ static int	ft_pvtchr(t_list *stack, t_list *start)
 	}
 	if (top == bottom || top - 1 == bottom)
 		return (pivot);
-	else if (bottom > top)
-		return (ft_pvtchr(stack, ft_nextnbr_chr(start, pivot, -1)));
-	return (ft_pvtchr(stack, ft_nextnbr_chr(start, pivot, 1)));
-}
-
-/*	After both stacks are confirmed to be sorted, if any values are still 	*/
-/*	on the STACK_B, it will merge them back to STACK_A using Insertionsort.	*/
-static void	ft_merge(t_list **stacks, char **order_arr)
-{
-	int	limit;
-	int	order;
-	
-	ft_printf("MERGE");
-	while (stacks[1])
-	{
-		order = ft_insertionsort(stacks[0], *(stacks[1]->content), -1, -1);
-		if (ft_execute(order, stacks))
-			ft_printf("%s\n", order_arr[order]);
-	}
-	limit = *(ft_limitchr(stacks[0], -1, -1)->content);
-	while (ft_checksort_lst(stacks[0], -1))
-	{
-		order = ft_get_distance(stacks[0], limit, 1);
-		if (ft_execute(order, stacks))
-			ft_printf("%s\n", order_arr[order]);	
-	}
+	return (ft_pvtchr(stack, start->next));
 }
 
 /*	Returns the most eficient pair of orders needed to sort both stacks.	*/
 /*	- The orders are recover from executing Bubblesort and Insertionsort,	*/
 /*	  in combination with other logical factors.							*/
-static int	ft_orders(t_list **stacks, int *order_b, int *pivot)
+/*	- Runlen == 0 means no subdivision.										*/
+static int	ft_get_orders(t_list **stacks, int *exe_a, int run, int runlen)
 {
-	t_list	*tmp;
-	int		order_a;
-	int		next_nbr;
+	t_list	*next_nbr;
+	int		new_run;
+	int		limit;
+	int		exe_b;
+	int		dir;
 
-	order_a = NO_ORDER;
-	tmp = ft_nextnbr_chr(stacks[0], *(pivot), -1);
-	if (!tmp)
-		tmp = stacks[0];
-	if (ft_checksort_lst(stacks[0], -1))
+	dir = 1;
+	new_run = 0;
+	if (stacks[1])
+		new_run = stacks[1]->run;
+	next_nbr = ft_nextnbr(stacks[0], exe_a, run);
+	if (runlen && stacks[1] && ft_runsize(stacks[1], stacks[1]->run) >= runlen)
 	{
-		next_nbr = *(tmp->content);
-		ft_printf("NEXT NBR QUICKSORT |%i|\n", next_nbr);
-		if ((*(stacks[0]->content)) < (*pivot) || *(stacks[0]->content) == next_nbr)
-			order_a = PB_ORDER;
-		else
-			order_a = RA_ORDER;
-		if ((*(stacks[0]->content)) == (*pivot))
-			(*pivot) = ft_pvtchr(stacks[0], stacks[0]);
-		*(order_b) = ft_insertionsort(stacks[1], next_nbr, -1, 1);
+		new_run = stacks[1]->run + 1;
+		limit = *(ft_limitchr(stacks[1], stacks[1]->run, dir)->content);
+		exe_b = ft_insertionsort(stacks[1], limit, stacks[1]->run, dir * -1);
+		if (*(stacks[1]->content) != limit)
+			return (ft_translate(exe_b));
 	}
-	if (*(order_b) > NO_ORDER && order_a == PB_ORDER)
-		order_a = NO_ORDER;
-	if (order_a == PB_ORDER && *(order_b) == PB_ORDER)
-		*(order_b) = NO_ORDER;
-	return (order_a);
+	if (new_run % 2 != 0)
+		dir *= -1;
+	exe_b = ft_insertionsort(stacks[1], *(next_nbr->content), new_run, dir);
+	exe_b = ft_translate(exe_b);
+	if (exe_b == PB_ORDER && *(exe_a) == NO_ORDER)
+		if (*(stacks[0]->content) == *(next_nbr->content))
+			stacks[0]->run = new_run;
+	return (exe_b);
 }
 
 /*	Sorts a stack of a numeric T_LIST ** with an order solution eficiency	*/
@@ -105,32 +95,51 @@ static int	ft_orders(t_list **stacks, int *order_b, int *pivot)
 /*	  pivot is pushed, becoming more efficient after each repetition.		*/
 /*  - Notice that the first order solution eficiency increases exponencialy	*/
 /*	  with the amount of values.											*/
-void	ft_quicksort(t_list **stacks, char **order_arr)
+void	ft_quicksort(t_list **stacks, char **order_lst, int runlen)
 {
-	int	pivot;
-	int	order_a;
-	int	order_b;
-	int	loop;
+	int	run;
+	int	exe_a;
+	int	exe_b;
 
-	loop = 0;
-	pivot = ft_pvtchr(stacks[0], stacks[0]);
-	while (((ft_checksort_lst(stacks[0], -1)) || ft_checksort_lst(stacks[1], 1)) && ++loop < 10)
+	run = -1;
+	ft_set_pvtrun(stacks[0], ft_pvtchr(stacks[0], stacks[0]));
+	while (stacks[0])
 	{
-		ft_print_stack(stacks);
-		order_b = NO_ORDER;
-		order_a = ft_orders(stacks, &order_b, &pivot);
-		if (order_a == order_b - 3)
+		if (!ft_runsize(stacks[0], run))
+			run *= -1;
+		exe_b = ft_get_orders(stacks, &exe_a, run, runlen);
+		if (exe_a != NO_ORDER && exe_b == PB_ORDER)
+			exe_b = NO_ORDER;
+		if (exe_a == exe_b - 3)
 		{
-			if (ft_execute(order_b + 3, stacks))
-				ft_printf("%s\n", order_arr[order_b + 3]);
+			if (ft_execute(exe_b + 3, stacks))
+				ft_printf("%s\n", order_lst[exe_b + 3]);			
 			continue ;
 		}
-		if (ft_execute(order_a, stacks))
-			ft_printf("%s\n", order_arr[order_a]);
-		if (ft_execute(order_b, stacks))
-			ft_printf("%s\n", order_arr[order_b]);
-		if (ft_lstsize(stacks[0]) <= 3)
-			ft_bubblesort(stacks, order_arr, 0, 0);
+		if (ft_execute(exe_a, stacks))
+			ft_printf("%s\n", order_lst[exe_a]);
+		if (ft_execute(exe_b, stacks))
+			ft_printf("%s\n", order_lst[exe_b]);
 	}
-	ft_merge(stacks, order_arr);
+	ft_mergesort(stacks, order_lst, 1);
 }
+/* while (((ft_checksort_lst(stacks[0], -1)) || ft_checksort_lst(stacks[1], 1)) && ++loop < 10)
+{
+	ft_print_stack(stacks);
+	order_b = NO_ORDER;
+	order_a = ft_orders(stacks, &order_b, &pivot);
+	if (order_a == order_b - 3)
+	{
+		if (ft_execute(order_b + 3, stacks))
+			ft_printf("%s\n", order_arr[order_b + 3]);
+		continue ;
+	}
+	if (ft_execute(order_a, stacks))
+		ft_printf("%s\n", order_arr[order_a]);
+	if (ft_execute(order_b, stacks))
+		ft_printf("%s\n", order_arr[order_b]);
+	if (ft_lstsize(stacks[0]) <= 3)
+		ft_bubblesort(stacks, order_arr, 0, 0);
+}
+ft_merge(stacks, order_arr);
+ */
