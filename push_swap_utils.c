@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/25 21:30:22 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:21:42 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,17 @@ int	ft_translate(int order)
 /*	number of the indicated run.											*/
 /*	- If there are no numbers with the indicated run, or there's a number	*/
 /*	  with the indicated run on the first position, returns NO_ORDER.		*/
-static int ft_distance_order(t_list *stack, int run)
+static int	ft_distance_order(t_list *stack, int run)
 {
 	int	count;
 	int	count_aux;
-	
+
 	count = 0;
 	count_aux = 0;
 	while (stack)
 	{
 		if (stack->run == run)
-			break;
+			break ;
 		stack = stack->next;
 		count++;
 	}
@@ -94,7 +94,7 @@ t_list	*ft_nextnbr(t_list *stack, int *exe, int run)
 	nbr = NULL;
 	*(exe) = ft_distance_order(stack, run);
 	if (*(exe) == NO_ORDER)
-		return  (stack);
+		return (stack);
 	if (*(exe) == RRA_ORDER)
 		dir *= -1;
 	while (stack && dir >= 0)
@@ -102,9 +102,9 @@ t_list	*ft_nextnbr(t_list *stack, int *exe, int run)
 		nbr = stack;
 		stack = stack->next;
 		if (stack && stack->run != run)
-			continue;
-		break;
-	}	
+			continue ;
+		break ;
+	}
 	while (stack && dir < 0)
 	{
 		if (stack->run == run)
@@ -124,7 +124,7 @@ int	ft_checksort_lst(t_list *stack, int col)
 	int	nbr_i;
 	int	nbr_j;
 	int	ans;
-	
+
 	ans = 0;
 	if (!stack || ft_lstsize(stack) <= 1)
 		return (ans);
@@ -162,7 +162,7 @@ int	ft_execute(int instruction, t_list **stacks)
 	else if (instruction == SB_ORDER)
 		return (ft_swap(&stacks[1]));
 	else if (instruction == SS_ORDER)
-		return (ft_double_ins(ft_swap, &stacks[0], &stacks[1]));
+		return (ft_double(ft_swap, &stacks[0], &stacks[1]));
 	else if (instruction == PA_ORDER)
 		return (ft_push(&stacks[1], &stacks[0]));
 	else if (instruction == PB_ORDER)
@@ -172,30 +172,27 @@ int	ft_execute(int instruction, t_list **stacks)
 	else if (instruction == RB_ORDER)
 		return (ft_rotate(&stacks[1]));
 	else if (instruction == RR_ORDER)
-		return (ft_double_ins(ft_rotate, &stacks[0], &stacks[1]));
+		return (ft_double(ft_rotate, &stacks[0], &stacks[1]));
 	else if (instruction == RRA_ORDER)
 		return (ft_reverse_rotate(&stacks[0]));
 	else if (instruction == RRB_ORDER)
 		return (ft_reverse_rotate(&stacks[1]));
 	else if (instruction == RRR_ORDER)
-		return (ft_double_ins(ft_reverse_rotate, &stacks[0], &stacks[1]));
+		return (ft_double(ft_reverse_rotate, &stacks[0], &stacks[1]));
 	return (0);
 }
 
-int	ft_get_distance(t_list *stack, int nbr, int dir)
+int	ft_get_distance(t_list *stack, int nbr)
 {
 	int	count;
 
 	count = 0;
-	if (dir < 0)
-		count = ft_lstsize(stack);
 	while (*(stack->content) != nbr)
 	{
-		if (dir < 0)
-			count--;
-		else
-			count++;
+		count++;
 		stack = stack->next;
 	}
+	if (count > ft_lstsize(stack) / 2)
+		return (count);
 	return (count);
 }

@@ -6,12 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:08:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/25 22:22:22 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:21:20 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
 
 int	ft_setruns(t_list *stack, int start, int dir)
 {
@@ -27,7 +26,7 @@ int	ft_setruns(t_list *stack, int start, int dir)
 			else
 				start++;
 		}
-		else 
+		else
 		{
 			if (stack->next && *(stack->content) < *(stack->next->content))
 			{
@@ -45,7 +44,7 @@ int	ft_setruns(t_list *stack, int start, int dir)
 int	ft_runsize(t_list *stack, int run)
 {
 	int	count;
-	
+
 	count = 0;
 	while (stack)
 	{
@@ -75,9 +74,9 @@ t_list	*ft_runchr(t_list *stack, int run, int *count)
 /*	- Use run -1 to find the limit number of the whole stack instead.		*/
 t_list	*ft_limitchr(t_list *stack, int run, int dir)
 {
-	int	count;
 	t_list	*tmp;
 	t_list	*nbr;
+	int		count;
 
 	count = 0;
 	nbr = ft_runchr(stack, run, &count);
@@ -95,4 +94,32 @@ t_list	*ft_limitchr(t_list *stack, int run, int dir)
 		tmp = tmp->next;
 	}
 	return (nbr);
+}
+
+int	ft_runsort(t_list *stack, int run, int dir, int col)
+{
+	int	count;
+	int	limit;
+	int	order;
+
+	count = 0;
+	order = RA_ORDER;
+	limit = *(ft_limitchr(stack, run, dir)->content);
+	stack = ft_runchr(stack, run, &count);
+	while (stack)
+	{
+		if (stack->run != run)
+			stack = ft_runchr(stack, run, &count);
+		if (*(stack->content) == limit)
+			break ;
+		count++;
+		stack = stack->next;
+	}
+	if (!count)
+		return (NO_ORDER);
+	if (count >= (ft_lstsize(stack) / 2))
+		order = RRA_ORDER;
+	if (col)
+		order += 3;
+	return (order);
 }

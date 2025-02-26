@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:04:06 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/13 12:33:16 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:23:32 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /*	and/or spaces.															*/
 /*	- Notice that, if a sign exists, the following must be a number.		*/
 /*	- Returns 0 if any non valid value is found.							*/
-static	int ft_number_check(char *str)
+static int	ft_number_check(char *str)
 {
 	int	i;
 
@@ -104,8 +104,8 @@ int	*ft_stack_check(char **argv, int *ptr_len)
 		return (NULL);
 	if (!ft_number_check(str))
 	{
-			free(str);
-			return (NULL);
+		free(str);
+		return (NULL);
 	}
 	argf = ft_split(str, ' ');
 	free(str);

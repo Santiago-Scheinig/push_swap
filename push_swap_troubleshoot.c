@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 20:10:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/13 12:09:39 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:24:54 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
 /*	Frees a numeric T_LIST ** structure and the INT * array					*/
-/*	used to create it.														*/ 
+/*	used to create it.														*/
 void	*ft_stack_free(int *ptr, t_list **stacks)
 {
 	t_list	*aux;

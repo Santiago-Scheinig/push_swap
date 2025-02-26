@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:18 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/20 16:58:38 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:24:30 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 int	ft_swap(t_list **stack)
 {
 	int	*aux;
-	
+
 	if (!(*stack) || !(*stack)->next)
 		return (0);
 	aux = (*stack)->content;
@@ -28,7 +28,7 @@ int	ft_swap(t_list **stack)
 
 /* 	Pushes the first element from stack_src to stack_des as it's first.		*/
 /* 	- If executed correctly, returns 1. Else, returns 0.					*/
-int ft_push(t_list	**stack_src, t_list **stack_des)
+int	ft_push(t_list **stack_src, t_list **stack_des)
 {
 	t_list	*aux;
 
@@ -89,7 +89,7 @@ int	ft_reverse_rotate(t_list **stack)
 /*	Executes the instruction sent as argument one time with both stack_a	*/
 /*	and stack_b.															*/
 /*	- If executed correctly, returns 1. Else, returns 0.					*/
-int ft_double_ins(int (*ins)(t_list **), t_list **stack_a, t_list **stack_b)
+int	ft_double(int (*ins)(t_list **), t_list **stack_a, t_list **stack_b)
 {
 	if (!(*stack_a) || !(*stack_a)->next)
 		return (0);

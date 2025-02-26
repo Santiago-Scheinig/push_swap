@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:33:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/25 22:43:52 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:04:20 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,31 +31,7 @@ int	ft_get_minrun(int	stack_len)
 	return (min_run);
 }
 
-int	ft_sort_run(t_list *stack, int run, int dir, int col)
-{
-	int	count;
-	int	limit;
-	int	order;
 
-	count = 0;
-	order = RA_ORDER;
-	limit = *(ft_limitchr(stack, run, dir)->content);
-	stack = ft_runchr(stack, run, &count);
-	while (stack && stack->run == run)
-	{
-		if (*(stack->content) == limit)
-			break ;
-		count++;
-		stack = stack->next;
-	}
-	if (!count)
-		return (NO_ORDER);
-	if (count < ft_lstsize(stack) / 2)
-		order = RRA_ORDER;
-	if (col)
-		order += 3;
-	return (order);
-}
 
 void	ft_run_maker(t_list **stacks, char **order_lst, int run, int dir)
 {
@@ -102,7 +78,7 @@ void	ft_minrun_split(t_list **stacks, char **order_lst, int run)
 		ft_bubblesort(stacks, order_lst, 1, dir);
 		ft_run_maker(stacks, order_lst, run, dir);
 		limit = *(ft_limitchr(stacks[1], run, dir)->content);
-		order = ft_sort_run(stacks[1], run, dir, 1);
+		order = ft_runsort(stacks[1], run, dir, 1);
 		while (*(stacks[1]->content) != limit)
 			if (ft_execute(order, stacks))
 				ft_printf("%s\n", order_lst[order]);
@@ -118,7 +94,8 @@ void	ft_timsort(t_list **stacks, char **order_lst)
 	int	order;
 	int	run;
 
-	ft_quicksort(stacks, order_lst, 25);
+	ft_quicksort(stacks, order_lst, 16);
+	ft_bubblesort(stacks, order_lst, 0, -1);
 	//ft_print_stack(stacks);
 	//ft_printruns(stacks[1]);
 	return ;
@@ -136,7 +113,7 @@ void	ft_timsort(t_list **stacks, char **order_lst)
 		//ft_print_stack(stacks);
 	}
 	limit = *(ft_limitchr(stacks[1], run, -1)->content);
-	order = ft_sort_run(stacks[1], run, -1, 1);
+	order = ft_runsort(stacks[1], run, -1, 1);
 	while (*(stacks[1]->content) != limit)
 		if (ft_execute(order, stacks))
 			ft_printf("%s\n", order_lst[order]);

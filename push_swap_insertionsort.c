@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 20:28:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/25 22:39:21 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:20:41 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	ft_getpos(t_list *stack, int nbr, int run)
 		stack = stack->next;
 		i++;
 	}
-	while ((nbr < *(stack->content) || nbr > *(tmp->content)) &&  ++i != size)
+	while ((nbr < *(stack->content) || nbr > *(tmp->content)) && ++i != size)
 	{
 		tmp = stack;
 		stack = stack->next;
@@ -71,21 +71,20 @@ static int	ft_getpos(t_list *stack, int nbr, int run)
 }
 
 /**/
-static int	ft_isrun_limit(t_list *stack, int nbr, int run, int  dir)
+static int	ft_isrun_limit(t_list *stack, int nbr, int run, int dir)
 {
-	t_list *limit_pos;
-	int	limit;
-	int ans;
+	t_list	*limit_pos;
+	int		limit;
+	int		ans;
 
 	limit = *(ft_limitchr(stack, run, dir)->content);
 	limit_pos = stack;
-	ans = ft_get_distance(stack, limit, 1);
+	ans = ft_get_distance(stack, limit);
 	if ((dir >= 0 && nbr < limit) || (dir < 0 && nbr > limit))
 	{
 		limit_pos = ft_lstlast(stack);
 		limit = *(ft_limitchr(stack, run, dir * -1)->content);
-		ans = ft_get_distance(stack, limit, 1);
-		//ft_printf("LIMIT |%i| - RUN |%i|\n", limit, run);
+		ans = ft_get_distance(stack, limit);
 	}
 	if (*(limit_pos->content) != limit)
 	{
@@ -113,11 +112,11 @@ static int	ft_is_limit(t_list *stack, int nbr, int run, int dir)
 		limit = *(ft_limitchr(stack, run, dir)->content);
 	if (*(stack->content) != limit)
 	{
-		ans = ft_get_distance(stack, limit, 1);
-		if (ans <= ft_lstsize(stack) / 2)
-			ans = RA_ORDER;
-		else
+		ans = ft_get_distance(stack, limit);
+		if (ans > ft_lstsize(stack) / 2)
 			ans = RRA_ORDER;
+		else
+			ans = RA_ORDER;
 	}
 	else
 		ans = PA_ORDER;
@@ -128,7 +127,7 @@ static int	ft_is_limit(t_list *stack, int nbr, int run, int dir)
 int	ft_insertionsort(t_list *stack_des, int nbr, int run, int dir)
 {
 	int	ans;
-	
+
 	if (!stack_des || ft_lstsize(stack_des) == 1 || !ft_runsize(stack_des, run))
 		return (PA_ORDER);
 	if (dir < 0)
@@ -138,7 +137,7 @@ int	ft_insertionsort(t_list *stack_des, int nbr, int run, int dir)
 	if (!ans)
 		ans = PA_ORDER;
 	else if (ans == ft_runsize(stack_des, run) || ans == ft_lstsize(stack_des))
-		ans = ft_is_limit(stack_des, nbr, run, dir);		
+		ans = ft_is_limit(stack_des, nbr, run, dir);
 	else if (ans > (ft_lstsize(stack_des) / 2))
 		ans = RRA_ORDER;
 	else
