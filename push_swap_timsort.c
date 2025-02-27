@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:33:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/26 21:04:20 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/27 19:53:40 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,75 +31,16 @@ int	ft_get_minrun(int	stack_len)
 	return (min_run);
 }
 
-
-
-void	ft_run_maker(t_list **stacks, char **order_lst, int run, int dir)
-{
-	int	order;
-	int	run_size;
-
-	run_size = ft_runsize(stacks[1], run);
-	while (run_size < 8)
-	{
-		//ft_print_stack(stacks);
-		if (!stacks[0])
-			break ;
-		order = ft_insertionsort(stacks[1], *(stacks[0]->content), run, dir);
-		if (dir < 0)
-			order = ft_translate(order);
-		if (ft_execute(order, stacks))
-		{
-			ft_printf("%s\n", order_lst[order]);
-			if (order == PB_ORDER)
-			{
-				stacks[1]->run = run;
-				run_size++;
-			}
-		}
-	}
-}
-
-void	ft_minrun_split(t_list **stacks, char **order_lst, int run)
-{
-	int order;
-	int	limit;
-	int	count;
-	int	dir;
-
-	dir = 1;
-	while (ft_lstsize(stacks[0]) >= 8)
-	{
-		count = -1;
-		while (++count < 2)
-			if (ft_execute(PB_ORDER, stacks))
-				ft_printf("%s\n", order_lst[PB_ORDER]);
-		stacks[1]->run = run;
-		stacks[1]->next->run = run;
-		ft_bubblesort(stacks, order_lst, 1, dir);
-		ft_run_maker(stacks, order_lst, run, dir);
-		limit = *(ft_limitchr(stacks[1], run, dir)->content);
-		order = ft_runsort(stacks[1], run, dir, 1);
-		while (*(stacks[1]->content) != limit)
-			if (ft_execute(order, stacks))
-				ft_printf("%s\n", order_lst[order]);
-		dir *= -1;
-		run++;
-	}
-}
-
-
 void	ft_timsort(t_list **stacks, char **order_lst)
 {
-	int	limit;
-	int	order;
-	int	run;
 
-	ft_quicksort(stacks, order_lst, 16);
+	ft_quicksort(stacks, order_lst, 64);
 	ft_bubblesort(stacks, order_lst, 0, -1);
+	ft_mergesort(stacks, order_lst, 64);
 	//ft_print_stack(stacks);
 	//ft_printruns(stacks[1]);
 	return ;
-	ft_minrun_split(stacks, order_lst, 0);
+/* 	ft_minrun_split(stacks, order_lst, 0);
 	//ft_print_stack(stacks);
 	run = stacks[1]->run;
 	while (stacks[0])
@@ -120,12 +61,12 @@ void	ft_timsort(t_list **stacks, char **order_lst)
 	//ft_print_stack(stacks);
 	ft_mergesort(stacks, order_lst, 1);
 	ft_mergesort(stacks, order_lst, 0);
-/*  	ft_printf("\nSTACK A\n");
+  	ft_printf("\nSTACK A\n");
 	ft_printruns(stacks[0]);
 	ft_printf("\nSTACK B\n");
-	ft_printruns(stacks[1]); */
-	return ;
+	ft_printruns(stacks[1]);
+ 	return ;
 	ft_mergesort(stacks, order_lst, 1);
 	ft_mergesort(stacks, order_lst, 1);
-	ft_mergesort(stacks, order_lst, 0);
+	ft_mergesort(stacks, order_lst, 0); */
 }

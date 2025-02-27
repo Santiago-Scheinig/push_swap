@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/26 21:21:42 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/27 18:37:10 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,5 @@ int	ft_get_distance(t_list *stack, int nbr)
 		count++;
 		stack = stack->next;
 	}
-	if (count > ft_lstsize(stack) / 2)
-		return (count);
 	return (count);
 }

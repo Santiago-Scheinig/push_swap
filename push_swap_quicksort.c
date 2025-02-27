@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:35:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/26 21:19:42 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/02/27 17:49:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,27 @@ static int	ft_pvtchr(t_list *stack, t_list *start)
 	return (ft_pvtchr(stack, start->next));
 }
 
+/* static void	ft_endrun(t_list **stacks, char **order_lst, int run, int col) //runs Max to Min
+{
+	t_list	*limit_pos;
+	int		limit;
+	int		exe_b;
+	int		exe_a;
+
+	exe_b = ft_runsort(stacks[col], run, 1, 1);
+	limit = *(ft_limitchr(stacks[col], run, 1)->content);
+	limit_pos = stacks[1];
+ 	while (*(limit_pos->content) != limit)
+	{
+		ft_nextnbr(stacks[1], &exe_a, run);
+		if (exe_a == exe_b + 3)
+			exe_b += 3;
+		if (ft_execute(exe_b, stacks))
+			ft_printf("%s\n", order_lst[exe_b]);
+		limit_pos = stacks[1];
+	}
+} */
+
 static void	ft_endrun(t_list **stacks, char **order_lst, int run, int col)
 {
 	t_list	*limit_pos;
@@ -62,12 +83,12 @@ static void	ft_endrun(t_list **stacks, char **order_lst, int run, int col)
 	exe_b = ft_runsort(stacks[col], run, 1, 1);
 	limit = *(ft_limitchr(stacks[col], run, 1)->content);
 	limit_pos = stacks[1];
-/* 	if ((run % 2) != 0)
+	if ((run % 2) != 0)
 	{
 		if (exe_b == NO_ORDER)
 			exe_b = RB_ORDER;
 		limit_pos = ft_lstlast(stacks[1]);
-	} */
+	}
 	while (*(limit_pos->content) != limit)
 	{
 		ft_nextnbr(stacks[1], &exe_a, run);
@@ -76,8 +97,8 @@ static void	ft_endrun(t_list **stacks, char **order_lst, int run, int col)
 		if (ft_execute(exe_b, stacks))
 			ft_printf("%s\n", order_lst[exe_b]);
 		limit_pos = stacks[1];
-/* 		if ((run % 2) != 0)
-			limit_pos = ft_lstlast(stacks[1]); */
+		if ((run % 2) != 0)
+			limit_pos = ft_lstlast(stacks[1]);
 	}
 }
 
@@ -88,17 +109,17 @@ static void	ft_endrun(t_list **stacks, char **order_lst, int run, int col)
 static int	ft_get_orders(t_list **stacks, int *exe_a, int *exe_b, int rlen)
 {
 	t_list	*next_nbr;
-	//int		dir;
+ 	int		dir;
 	int		run;
 
-	run = 0;
-	//dir = 1;
+ 	run = 0;
+ 	dir = 1;
 	while (rlen && ft_runsize(stacks[1], run) >= rlen)
 		run++;
-/* 	if ((run % 2) != 0)
-		dir *= -1; */
+ 	if ((run % 2) != 0)
+		dir *= -1;
 	next_nbr = ft_nextnbr(stacks[0], exe_a, -1);
-	*(exe_b) = ft_insertionsort(stacks[1], *(next_nbr->content), run, 1);
+	*(exe_b) = ft_insertionsort(stacks[1], *(next_nbr->content), run, dir);
 	*(exe_b) = ft_translate(*(exe_b));
 	if (rlen && stacks[1] && ft_runsize(stacks[1], run) >= rlen)
 	{
