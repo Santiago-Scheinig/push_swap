@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:33:40 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/27 19:51:01 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:39:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,37 +18,35 @@ static int	ft_mergepair(t_list *src, t_list *des, int run_a, int run_b)
 	t_list	*des_last;
 	int		order;
 
-	order = RRB_ORDER;
+	order = NO_ORDER;
 	src_last = ft_lstlast(src);
 	des_last = ft_lstlast(des);
-	if (src->run == run_a || src->run == run_b)
-	{
-		if ((src->run != run_a || src->run != run_b) 
-		&& (src_last->run == run_a || src_last->run == run_a))
-			return (RRB_ORDER);
-		if (*(src->content) < *(src_last->content) && 
-		(src_last->run == run_a || src_last->run == run_b))
+	if ((src->run != run_a && src->run != run_b) 
+	&& (src_last->run == run_a || src_last->run == run_a))
+		return (RRB_ORDER);
+	else if (*(src->content) < *(src_last->content) && 
+	(src_last->run == run_a || src_last->run == run_b))
+		order = RRB_ORDER;
+	else if (*(src->content) < *(des->content))
+		order = PA_ORDER;
+	else if (*(src->content) > *(des_last->content))
+		order = PA_ORDER;
+	if (order == PA_ORDER && *(des_last->content) > *(src->content))
+		if (*(des->content) > *(des_last->content))
+			order = RRA_ORDER;
+	if (order == NO_ORDER && (src->run != run_a || src->run != run_b))
+		if (src_last->run == run_a || src_last->run == run_b)
 			order = RRB_ORDER;
-		else if (*(src->content) < *(des->content))
-			order = PA_ORDER;
-		else if (*(src->content) > *(des_last->content))
-			order = PA_ORDER;
-		if (order == PA_ORDER && *(des_last->content) > *(src->content))
-			if (*(des->content) > *(des_last->content))
-				order = RRA_ORDER;
-	}
 	return (order);
 }
 
-void	ft_mergesort(t_list **stacks, char **order_lst, int rlen)
+void	ft_mergesort(t_list **stacks, char **order_lst)
 {
 	int	limit;
 	int	order;
 	int	run_a;
 	int run_b;
 
-	if (rlen)
-		rlen = 0;
 	while (stacks[1])
 	{
 		run_a = stacks[1]->run;
@@ -67,4 +65,5 @@ void	ft_mergesort(t_list **stacks, char **order_lst, int rlen)
 				ft_printf("%s\n", order_lst[order]);
 		}
 	}
+	ft_print_stack(stacks);
 }

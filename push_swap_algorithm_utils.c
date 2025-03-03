@@ -6,40 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:08:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/26 21:21:20 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:49:33 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-int	ft_setruns(t_list *stack, int start, int dir)
-{
-	while (stack)
-	{
-		if (dir >= 0)
-		{
-			if (stack->next && *(stack->content) > *(stack->next->content))
-			{
-				stack->run = start;
-				stack->next->run = start;
-			}
-			else
-				start++;
-		}
-		else
-		{
-			if (stack->next && *(stack->content) < *(stack->next->content))
-			{
-				stack->run = start;
-				stack->next->run = start;
-			}
-			else
-				start++;
-		}
-		stack = stack->next;
-	}
-	return (start);
-}
 
 int	ft_runsize(t_list *stack, int run)
 {
@@ -122,4 +93,17 @@ int	ft_runsort(t_list *stack, int run, int dir, int col)
 	if (col)
 		order += 3;
 	return (order);
+}
+
+int	ft_get_distance(t_list *stack, int nbr)
+{
+	int	count;
+
+	count = 0;
+	while (*(stack->content) != nbr)
+	{
+		count++;
+		stack = stack->next;
+	}
+	return (count);
 }

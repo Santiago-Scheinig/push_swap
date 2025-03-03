@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/27 18:37:10 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:49:28 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,17 +180,4 @@ int	ft_execute(int instruction, t_list **stacks)
 	else if (instruction == RRR_ORDER)
 		return (ft_double(ft_reverse_rotate, &stacks[0], &stacks[1]));
 	return (0);
-}
-
-int	ft_get_distance(t_list *stack, int nbr)
-{
-	int	count;
-
-	count = 0;
-	while (*(stack->content) != nbr)
-	{
-		count++;
-		stack = stack->next;
-	}
-	return (count);
 }

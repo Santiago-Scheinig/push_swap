@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:35:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/27 17:49:24 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:46:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,27 +51,6 @@ static int	ft_pvtchr(t_list *stack, t_list *start)
 		return (pivot);
 	return (ft_pvtchr(stack, start->next));
 }
-
-/* static void	ft_endrun(t_list **stacks, char **order_lst, int run, int col) //runs Max to Min
-{
-	t_list	*limit_pos;
-	int		limit;
-	int		exe_b;
-	int		exe_a;
-
-	exe_b = ft_runsort(stacks[col], run, 1, 1);
-	limit = *(ft_limitchr(stacks[col], run, 1)->content);
-	limit_pos = stacks[1];
- 	while (*(limit_pos->content) != limit)
-	{
-		ft_nextnbr(stacks[1], &exe_a, run);
-		if (exe_a == exe_b + 3)
-			exe_b += 3;
-		if (ft_execute(exe_b, stacks))
-			ft_printf("%s\n", order_lst[exe_b]);
-		limit_pos = stacks[1];
-	}
-} */
 
 static void	ft_endrun(t_list **stacks, char **order_lst, int run, int col)
 {
