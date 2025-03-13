@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:46:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/03 15:50:24 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/13 21:14:06 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int		ft_swap(t_list **stack);
 
 void	ft_quicksort(t_list **stacks, char **order_lst, int rlen);
 
-void	ft_mergesort(t_list **stacks, char **order_lst);
+void	ft_mergesort(t_list **stacks, char **order_lst, int run_a, int run_b);
 
 void	ft_timsort(t_list **stacks, char **order_lst);
 

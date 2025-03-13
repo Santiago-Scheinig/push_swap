@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/03 15:49:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/13 19:29:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ static int	ft_distance_order(t_list *stack, int run)
 	count_aux = 0;
 	while (stack)
 	{
-		if (stack->run == run)
-			break ;
+		if (stack->run == run && !count)
+			return (NO_ORDER);
 		stack = stack->next;
 		count++;
 	}
@@ -80,7 +80,7 @@ static int	ft_distance_order(t_list *stack, int run)
 	}
 	if (!count || count == ft_lstsize(stack))
 		return (NO_ORDER);
-	if (count_aux < count)
+	if (count_aux <= count)
 		return (RRA_ORDER);
 	return (RA_ORDER);
 }

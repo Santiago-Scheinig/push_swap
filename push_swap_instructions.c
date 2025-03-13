@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:18 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/27 20:15:08 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/13 19:48:23 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,14 @@ int	ft_reverse_rotate(t_list **stack)
 /*	- If executed correctly, returns 1. Else, returns 0.					*/
 int	ft_double(int (*ins)(t_list **), t_list **stack_a, t_list **stack_b)
 {
-	if (!(*stack_a) || !(*stack_a)->next)
+	int	ans;
+
+	ans = 0;
+	if (!ins(stack_a))
+		ans++;
+	if (!ins(stack_b))
+		ans++;
+	if (ans == 2)
 		return (0);
-	if (!(*stack_b) || !(*stack_b)->next)
-		return (0);
-	ins(stack_a);
-	ins(stack_b);
 	return (1);
 }

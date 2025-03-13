@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:35:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/03 15:46:14 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:40:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,27 +64,26 @@ static void	ft_endrun(t_list **stacks, char **order_lst, int run, int col)
 	limit_pos = stacks[1];
 	if ((run % 2) != 0)
 	{
-		if (exe_b == NO_ORDER)
-			exe_b = RB_ORDER;
-		limit_pos = ft_lstlast(stacks[1]);
+		exe_b = ft_runsort(stacks[col], run, -1, 1);
+		limit = *(ft_limitchr(stacks[col], run, -1)->content);
 	}
 	while (*(limit_pos->content) != limit)
 	{
-		ft_nextnbr(stacks[1], &exe_a, run);
-		if (exe_a == exe_b + 3)
-			exe_b += 3;
-		if (ft_execute(exe_b, stacks))
+		ft_nextnbr(stacks[0], &exe_a, 1);
+		if (exe_a == exe_b - 3)
+		{
+			if (ft_execute(exe_b + 3, stacks))
+				ft_printf("%s\n", order_lst[exe_b + 3]);
+		}
+		else if (ft_execute(exe_b, stacks))
 			ft_printf("%s\n", order_lst[exe_b]);
 		limit_pos = stacks[1];
-		if ((run % 2) != 0)
-			limit_pos = ft_lstlast(stacks[1]);
 	}
 }
 
 /*	Returns the most eficient pair of orders needed to sort both stacks.	*/
-/*	- The orders are recover from executing Bubblesort and Insertionsort,	*/
-/*	  in combination with other logical factors.							*/
-/*	- Runlen == 0 means no subdivision.										*/
+/*	- The orders are recover from executing Insertionsort in combination 	*/
+/*	with other logical factors.												*/
 static int	ft_get_orders(t_list **stacks, int *exe_a, int *exe_b, int rlen)
 {
 	t_list	*next_nbr;
@@ -97,7 +96,7 @@ static int	ft_get_orders(t_list **stacks, int *exe_a, int *exe_b, int rlen)
 		run++;
  	if ((run % 2) != 0)
 		dir *= -1;
-	next_nbr = ft_nextnbr(stacks[0], exe_a, -1);
+	next_nbr = ft_nextnbr(stacks[0], exe_a, 1);
 	*(exe_b) = ft_insertionsort(stacks[1], *(next_nbr->content), run, dir);
 	*(exe_b) = ft_translate(*(exe_b));
 	if (rlen && stacks[1] && ft_runsize(stacks[1], run) >= rlen)
@@ -116,11 +115,13 @@ static int	ft_get_orders(t_list **stacks, int *exe_a, int *exe_b, int rlen)
 /*	Sorts a stack of a numeric T_LIST ** with an order solution eficiency	*/
 /*	from: O(n^2) to O(n log (n)).											*/
 /*	- To sort the stack it will split it with a middle pivot and push every */
-/*	  minimum number found to the second stack, using Insertionsort to		*/
-/*	  secure the correct sorting. It will repeat this process everytime	the	*/
-/*	  pivot is pushed, becoming more efficient after each repetition.		*/
-/*  - Notice that the first order solution eficiency increases exponencialy	*/
-/*	  with the amount of values.											*/
+/*	  maximum number found to the second stack, using Insertionsort to		*/
+/*	  secure the correct sorting. It will repeat this process everytime	no	*/
+/*	  maximum numbers are left, becoming more efficient after each 			*/
+/*	  repetition.															*/
+/*	- Use rlen to subdivide the numbers sorted with Insertionsort into runs */
+/*	  of the decleared size.												*/
+/*	- Rlen equal 0 means no subdivision into runs.							*/
 void	ft_quicksort(t_list **stacks, char **order_lst, int rlen)
 {
 	int	run;
@@ -129,12 +130,12 @@ void	ft_quicksort(t_list **stacks, char **order_lst, int rlen)
 
 	run = 0;
 	ft_pvtrun(stacks[0], ft_pvtchr(stacks[0], stacks[0]));
-	while (ft_lstsize(stacks[0]) > 3 && ft_checksort_lst(stacks[0], 0))
+	while (ft_lstsize(stacks[0]) > 1)
 	{
-		if (rlen && !ft_runsize(stacks[0], -1) && ft_lstsize(stacks[0]) > rlen)
+		if (rlen && !ft_runsize(stacks[0], 1) && ft_lstsize(stacks[0]) > rlen)
 			ft_pvtrun(stacks[0], ft_pvtchr(stacks[0], stacks[0]));
-		else if (!ft_runsize(stacks[0], -1))
-			ft_pvtrun(stacks[0], *(ft_limitchr(stacks[0], -1, 1)->content));
+		else if (!ft_runsize(stacks[0], 1))
+			ft_pvtrun(stacks[0], *(ft_limitchr(stacks[0], -1, -1)->content));
 		run = ft_get_orders(stacks, &exe_a, &exe_b, rlen);
 		if (exe_a == exe_b - 3)
 			exe_b += 3;

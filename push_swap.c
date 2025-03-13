@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:37:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/03 15:19:13 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/13 21:24:17 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	main(int argc, char **argv)
 	{
 		ft_quicksort(stacks, order_lst, 0);
 		ft_bubblesort(stacks, order_lst, 0, -1);
-		ft_mergesort(stacks, order_lst);
+		ft_mergesort(stacks, order_lst, 0, 0);
  	}
 	else
 		ft_timsort(stacks, order_lst);

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:08:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/03 15:49:33 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:13:27 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ t_list	*ft_limitchr(t_list *stack, int run, int dir)
 
 	count = 0;
 	nbr = ft_runchr(stack, run, &count);
-	tmp = nbr->next;
+	if (nbr)
+		tmp = nbr->next;
+	else
+		tmp = NULL;
 	while (tmp)
 	{
 		if (run == -1)
@@ -74,7 +77,7 @@ int	ft_runsort(t_list *stack, int run, int dir, int col)
 	int	order;
 
 	count = 0;
-	order = RA_ORDER;
+	order = RRA_ORDER;
 	limit = *(ft_limitchr(stack, run, dir)->content);
 	stack = ft_runchr(stack, run, &count);
 	while (stack)
@@ -88,8 +91,8 @@ int	ft_runsort(t_list *stack, int run, int dir, int col)
 	}
 	if (!count)
 		return (NO_ORDER);
-	if (count >= (ft_lstsize(stack) / 2))
-		order = RRA_ORDER;
+	if (count <= (ft_lstsize(stack) / 2))
+		order = RA_ORDER;
 	if (col)
 		order += 3;
 	return (order);
