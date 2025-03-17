@@ -6,40 +6,16 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:54:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/13 19:29:22 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:13:13 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static	void	ft_prints(t_list **stack)
-{
-	t_list	*aux;
-	int		*ptr;
-	int		ans;
-
-	if (!stack)
-		return ;
-	ans = 0;
-	aux = (*stack);
-	while (aux)
-	{
-		ptr = aux->content;
-		ans += ft_printf("| %-03i |\n", *ptr);
-		aux = aux->next;
-	}
-}
-
-void	ft_print_stack(t_list **stacks)
-{
-	if (!stacks)
-		return ;
-	ft_printf("A.\n");
-	ft_prints(&stacks[0]);
-	ft_printf("B.\n");
-	ft_prints(&stacks[1]);
-}
-
+/*	Translates the order sent as argument into its paralel version, and		*/
+/*	returns it.																*/
+/*	- Any order that would be executed in the STACK A is translated to 		*/
+/*	  execute in the STACK B, and viceversa.								*/
 int	ft_translate(int order)
 {
 	if (order == SA_ORDER || order == RA_ORDER || order == RRA_ORDER)
@@ -85,6 +61,10 @@ static int	ft_distance_order(t_list *stack, int run)
 	return (RA_ORDER);
 }
 
+/*	Returns the position on the stack of the next closest number with		*/
+/*	the indicated run.														*/
+/*	- Additionally, it saves the instruction needed to place it in the		*/
+/*	  first position, into exe.												*/
 t_list	*ft_nextnbr(t_list *stack, int *exe, int run)
 {
 	t_list	*nbr;
@@ -118,24 +98,26 @@ t_list	*ft_nextnbr(t_list *stack, int *exe, int run)
 /*	- Positive direction checks max to min sort.							*/
 /*	- Negative direction checks min to max sort.							*/
 /*	- Returns the amount of sort errors found on the stack, 0 equals sorted.*/
-/*	- Notice that an empty list is a sorted one.							*/
-int	ft_checksort_lst(t_list *stack, int col)
+/*	NOTICE 																	*/
+/*	|-|																		*/
+/*	- An empty or one numeric list is a sorted one.							*/
+int	ft_checksort_lst(t_list *stack, int dir)
 {
 	int	nbr_i;
 	int	nbr_j;
 	int	ans;
 
 	ans = 0;
-	if (!stack || ft_lstsize(stack) <= 1)
+	if (!stack || !stack->next)
 		return (ans);
 	while (stack)
 	{
 		nbr_i = *(stack->content);
 		if (stack->next)
 			nbr_j = *(stack->next->content);
-		if (!col && nbr_i > nbr_j)
+		if (dir < 0 && nbr_i > nbr_j)
 			ans++;
-		if (col && nbr_i < nbr_j)
+		if (dir >= 0 && nbr_i < nbr_j)
 			ans++;
 		stack = stack->next;
 	}
@@ -143,17 +125,17 @@ int	ft_checksort_lst(t_list *stack, int col)
 }
 
 /*	Executes a given instruction:											*/
-/*	||	PA_ORDER == 0														*/
-/*	||	PB_ORDER == 1														*/
-/*	||	SA_ORDER == 2														*/
-/*	||	RA_ORDER == 3														*/
-/*	||	RRA_ORDER == 4														*/
-/*	||	SB_ORDER == 5														*/
-/*	||	RB_ORDER == 6														*/
-/*	||	RRB_ORDER == 7														*/
-/*	||	SS_ORDER == 8														*/
-/*	||	RR_ORDER == 9														*/
-/*	||	RRR_ORDER == 10														*/
+/*	||	PA_ORDER	==	0													*/
+/*	||	PB_ORDER	==	1													*/
+/*	||	SA_ORDER	==	2													*/
+/*	||	RA_ORDER	==	3													*/
+/*	||	RRA_ORDER	==	4													*/
+/*	||	SB_ORDER	==	5													*/
+/*	||	RB_ORDER	==	6													*/
+/*	||	RRB_ORDER	==	7													*/
+/*	||	SS_ORDER	==	8													*/
+/*	||	RR_ORDER	==	9													*/
+/*	||	RRR_ORDER 	==	10													*/
 /*	- If the instruction isn't valid, returns 0.							*/
 int	ft_execute(int instruction, t_list **stacks)
 {

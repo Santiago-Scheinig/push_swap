@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:45:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/26 21:23:06 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:57:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static int	ft_minmax_orders(t_list *stack)
 }
 
 /*	Executes up to three instructions to sort an individual stack of a		*/
-/*	numeric T_LIST ** with a O(n) order solution.							*/
+/*	numeric T_LIST ** with an order efficiency of: O(n).					*/
 /*  - Use column to indicate which stack to sort:							*/
 /*	|| STACK A == 0															*/
 /*	|| STACK B == 1															*/

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:04:06 by sscheini          #+#    #+#             */
-/*   Updated: 2025/02/26 21:23:32 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/17 11:44:56 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 /*	Verifies that every value in a string are numeric characters, signs		*/
 /*	and/or spaces.															*/
-/*	- Notice that, if a sign exists, the following must be a number.		*/
 /*	- Returns 0 if any non valid value is found.							*/
+/*	NOTICE 																	*/
+/*	|-|																		*/
+/*	- If a sign exists, the following must be a number.						*/
 static int	ft_number_check(char *str)
 {
 	int	i;

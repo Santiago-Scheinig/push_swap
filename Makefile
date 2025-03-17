@@ -22,8 +22,8 @@ LIB		=	libft.a
 NAME	=	push_swap
 BONUS	=	
 #
-CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -g
+CC		=	cc
+CFLAGS	=	-Wall -Wextra -Werror
 
 #---------- Edit the following if: IGLAGS added or no sub-makefile needed. ----------
 

@@ -6,12 +6,13 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:08:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/13 18:13:27 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:13:27 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+/*	Returns the amount of numbers in the stack with the indicated run.		*/
 int	ft_runsize(t_list *stack, int run)
 {
 	int	count;
@@ -26,6 +27,13 @@ int	ft_runsize(t_list *stack, int run)
 	return (count);
 }
 
+/*	Returns the position in the stack with the first number that is part of	*/
+/*	the indicated run.														*/
+/*	- Additionally, increases count for each position in the stack passed.	*/
+/*	- Returns NULL if no number with the indicated run is find.				*/
+/*	NOTICE 																	*/
+/*	|-|																		*/
+/*	- Count is increased even if NULL is returned.							*/
 t_list	*ft_runchr(t_list *stack, int run, int *count)
 {
 	if (run == -1)
@@ -70,7 +78,14 @@ t_list	*ft_limitchr(t_list *stack, int run, int dir)
 	return (nbr);
 }
 
-int	ft_runsort(t_list *stack, int run, int dir, int col)
+/*	Returns the most efficient instruction to get the indicated run limit 	*/
+/*	in first position.														*/
+/*	- Use negative direction to use the minimum limit as reference.			*/
+/*	- Use positive direction to use the maximum limit as reference.			*/
+/*	NOTICE 																	*/
+/*	|-|																		*/
+/*	- If the indicated run limit is in first position, returns NO_ORDER.	*/
+int	ft_runsort(t_list *stack, int run, int dir)
 {
 	int	count;
 	int	limit;
@@ -93,11 +108,12 @@ int	ft_runsort(t_list *stack, int run, int dir, int col)
 		return (NO_ORDER);
 	if (count <= (ft_lstsize(stack) / 2))
 		order = RA_ORDER;
-	if (col)
-		order += 3;
 	return (order);
 }
 
+/*	Returns the distance from the first position of the stack and the		*/
+/*	indicated number.														*/
+/*	- If the number isn't found, it returns the size of the stack.			*/
 int	ft_get_distance(t_list *stack, int nbr)
 {
 	int	count;
