@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:37:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/17 16:51:22 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/19 20:22:42 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@
 # include <limits.h>
 # include <unistd.h>
 
+/*--------------------------------------------------------------------------*/
+/*----------------------------------STRING----------------------------------*/
+/*--------------------------------------------------------------------------*/
+
 /* Copies 'size' bytes form 'src' into 'dst'. 		  						*/
 /* - If 'size' >= src_len + 1, it copies all of 'src' into 'dst'. 			*/
 /* - Else, it truncates the copy after size - 1 bytes.			  			*/
@@ -34,29 +38,6 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size);
 
 /* Returns the count of characters on 's', not including the '\0'.			*/
 size_t	ft_strlen(const char *s);
-
-/* Moves 'n' bytes from 'src' into 'dest', returning 'dest'. 				*/
-void	*ft_memmove(void *dest, const void *src, size_t n);
-
-/* Copies 'n' bytes from 'src' into 'dest', returning 'dest'. 				*/
-void	*ft_memcpy(void *dest, const void *src, size_t n);
-
-/* Searches for 'c' inside 's' for 'n' bytes.								*/
-/* - Returns a VOID * to the first match or NULL, in case there's no match.	*/
-void	*ft_memchr(const void *s, int c, size_t n);
-
-/* Sets 'n' bytes of 's' with 'c', returning 's'. 							*/
-void	*ft_memset(void *s, int c, size_t n);
-
-/* Allocates 'nmemb'*'size' bytes of memory and sets them to '\0'.			*/
-/* - Returns a VOID * created as a result.									*/
-void	*ft_calloc(size_t nmemb, size_t size);
-
-/* Iterates 'f' in every character of 's'. 									*/
-void	ft_striteri(char *s, void (*f)(unsigned int, char *));
-
-/* Sets 'n' bytes of the VOID * passed as an argument, to '\0'. 			*/
-void	ft_bzero(void *s, size_t n);
 
 /* Returns an ARRAY of CHAR * with every word found in 's'. 				*/
 /* - The words are divided using 'c'.								 		*/
@@ -88,9 +69,6 @@ char	*ft_strtrim(char const *s1, char const *set);
 /* Returns a CHAR * with the result of concatenate 's1' and 's2'.			*/
 char	*ft_strjoin(char const *s1, char const *s2);
 
-/* Returns a char * with the next line on the file descriptor given.	*/
-char	*get_next_line(int fd);
-
 /* Creates and returns a CHAR * that includes every content included in the */
 /* arguments **ARGV, but as a single string instead.						*/
 char	*ft_argjoin(char **argv);
@@ -109,37 +87,43 @@ char	*ft_strdup(const char *s);
 /* Returns a CHAR * that includes the INT passed as an argument. 			*/
 char	*ft_itoa(int n);
 
-/* Returns an long with the first number found on a CHAR *.					*/
-long	ft_atol(const char *nptr);
+/* Returns a char * with the next line on the file descriptor given.		*/
+char	*get_next_line(int fd);
+
+/* Iterates 'f' in every character of 's'. 									*/
+void	ft_striteri(char *s, void (*f)(unsigned int, char *));
 
 /* Compares 's1' and 's2' for 'n' bytes.									*/
 /* - Returns '0' if true, or a '+' or '-' number if false.(ASCII difference)*/
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
-
-/* Compares 's1' and 's2' for 'n' bytes.									*/
-/* - Returns '0' if true, or a '+' or '-' number if false.(ASCII difference)*/
-int		ft_memcmp(const void *s1, const void *s2, size_t n);
-
-/* Writes all of 's' into the 'fd' passed as an argument.					*/
-/* - Writes '\n' at the end, after writing 's', instead of a '\0'.			*/
-/* - Returns the amount of characters printed.								*/
-int		ft_putendl_fd(char *s, int fd);
-
-/* Writes 'c' into the 'fd' passed as an argument. 							*/
-/* - Returns the amount of characters printed.								*/
-int		ft_putchar_fd(char c, int fd);
 
 /* Writes all of 's' into the 'fd' passed as ab argument. 					*/
 /* - The '\0' character is not written at the end of 's'.			   		*/
 /* - Returns the amount of characters printed.								*/
 int		ft_putstr_fd(char *s, int fd);
 
+/* Writes all of 's' into the 'fd' passed as an argument.					*/
+/* - Writes '\n' at the end, after writing 's', instead of a '\0'.			*/
+/* - Returns the amount of characters printed.								*/
+int		ft_putendl_fd(char *s, int fd);
+
+/*--------------------------------------------------------------------------*/
+/*---------------------------------INTEGERS---------------------------------*/
+/*--------------------------------------------------------------------------*/
+
+/* Returns an long with the first number found on a CHAR *.					*/
+long	ft_atol(const char *nptr);
+
+/* Returns an INT with the first number found on a CHAR *.					*/
+int		ft_atoi(const char *nptr);
+
 /* Writes 'n' as a STRING into the 'fd' passed as an argument.				*/
 /* - Returns the amount of characters printed.								*/
 int		ft_putnbr_fd(int n, int fd);
 
-/* Returns an INT with the first number found on a CHAR *.					*/
-int		ft_atoi(const char *nptr);
+/*--------------------------------------------------------------------------*/
+/*--------------------------------CHARACTER---------------------------------*/
+/*--------------------------------------------------------------------------*/
 
 int		ft_isalpha(int c);
 
@@ -154,6 +138,42 @@ int		ft_isprint(int c);
 int		ft_toupper(int c);
 
 int		ft_tolower(int c);
+
+/* Writes 'c' into the 'fd' passed as an argument. 							*/
+/* - Returns the amount of characters printed.								*/
+int		ft_putchar_fd(char c, int fd);
+
+/*--------------------------------------------------------------------------*/
+/*----------------------------------MEMORY----------------------------------*/
+/*--------------------------------------------------------------------------*/
+
+/* Moves 'n' bytes from 'src' into 'dest', returning 'dest'. 				*/
+void	*ft_memmove(void *dest, const void *src, size_t n);
+
+/* Copies 'n' bytes from 'src' into 'dest', returning 'dest'. 				*/
+void	*ft_memcpy(void *dest, const void *src, size_t n);
+
+/* Searches for 'c' inside 's' for 'n' bytes.								*/
+/* - Returns a VOID * to the first match or NULL, in case there's no match.	*/
+void	*ft_memchr(const void *s, int c, size_t n);
+
+/* Sets 'n' bytes of 's' with 'c', returning 's'. 							*/
+void	*ft_memset(void *s, int c, size_t n);
+
+/* Allocates 'nmemb'*'size' bytes of memory and sets them to '\0'.			*/
+/* - Returns a VOID * created as a result.									*/
+void	*ft_calloc(size_t nmemb, size_t size);
+
+/* Sets 'n' bytes of the VOID * passed as an argument, to '\0'. 			*/
+void	ft_bzero(void *s, size_t n);
+
+/* Compares 's1' and 's2' for 'n' bytes.									*/
+/* - Returns '0' if true, or a '+' or '-' number if false.(ASCII difference)*/
+int		ft_memcmp(const void *s1, const void *s2, size_t n);
+
+/*--------------------------------------------------------------------------*/
+/*----------------------------------S_LIST----------------------------------*/
+/*--------------------------------------------------------------------------*/
 
 typedef struct s_list
 {
