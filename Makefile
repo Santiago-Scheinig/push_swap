@@ -26,7 +26,7 @@ NAME	=	push_swap
 BONUS	=	checker
 #
 CC		=	cc
-CFLAGS	=	-Wall -Wextra -Werror -g
+CFLAGS	=	-Wall -Wextra -Werror
 
 #---------- Edit the following if: IGLAGS added or no sub-makefile needed. ----------
 
