@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:35:51 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/19 20:10:26 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/19 20:42:56 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,10 @@ int	main(int argc, char **argv)
 		return (0);
 	order_lst = NULL;
 	stacks = ft_stack_ini(argv, &ptr);
+	if (!stacks || !stacks[0])
+		return (ft_forcend(ptr, stacks, NULL));
 	order_lst = ft_read_orders();
-	if (!stacks || !order_lst)
+	if (!order_lst)
 		return (ft_forcend(ptr, stacks, order_lst));
 	ft_verify_solution(stacks, order_lst);
 	if (stacks[1])
