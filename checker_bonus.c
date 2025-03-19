@@ -6,12 +6,25 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:35:51 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/19 19:44:13 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/19 20:10:26 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker_bonus.h"
 
+/*	Translates the instruction on STR, returning it's INT correspondance.	*/
+/*	||	PA_ORDER	==	0													*/
+/*	||	PB_ORDER	==	1													*/
+/*	||	SA_ORDER	==	2													*/
+/*	||	RA_ORDER	==	3													*/
+/*	||	RRA_ORDER	==	4													*/
+/*	||	SB_ORDER	==	5													*/
+/*	||	RB_ORDER	==	6													*/
+/*	||	RRB_ORDER	==	7													*/
+/*	||	SS_ORDER	==	8													*/
+/*	||	RR_ORDER	==	9													*/
+/*	||	RRR_ORDER 	==	10													*/
+/*	- If the instruction on STR isn't valid, returns -1. 					*/
 static int	ft_translate_order(char *str)
 {
 	if (!ft_strncmp(str, "pa", 3))
@@ -39,7 +52,8 @@ static int	ft_translate_order(char *str)
 	return (NO_ORDER);
 }
 
-//error with free in str when '\n' lines are read.
+/*	Reads on STDIN line by line until EOF and returns them as a CHAR **		*/
+/*	- If allocation error or a line read just includes '\n', returns NULL.	*/
 static char	**ft_read_orders(void)
 {
 	char	**order_lst;
@@ -69,6 +83,14 @@ static char	**ft_read_orders(void)
 	return (order_lst);
 }
 
+/*	Verifies the sorting solution saved in ORDER_LST by replicating the		*/
+/*	instructions on STACKS.													*/
+/*	- If STACK A ends sorted from minimum to maximum and no nodes remain	*/
+/*	  in STACK B, prints "OK". Else, prints "KO".							*/
+/*	NOTICE																	*/
+/* |-|																		*/
+/*	- If the instruction isn't valid or can't be properly executed, it 		*/
+/*	  prints "Error" and returns.											*/
 static void	ft_verify_solution(t_list **stacks, char **order_lst)
 {
 	int	i;
@@ -86,9 +108,6 @@ static void	ft_verify_solution(t_list **stacks, char **order_lst)
 		ft_printf("OK\n");
 	else
 		ft_printf("KO\n");
-	if (stacks[1])
-		while (stacks[1])
-			ft_execute(PA_ORDER, stacks);
 }
 
 /*	Verifies the proper format of the inputed values; If values are valid,	*/
@@ -125,8 +144,8 @@ static t_list	**ft_stack_ini(char **argv, int **ptr)
 /*  of integers numbers, without duplicates, using only two stacks and		*/
 /*	limited movement instructions.											*/
 /*	- The array of integers numbers must be sent as an argument.			*/
-/*	- If the array is valid, the checker will start to read stdout for the	*/
-/*	  instructions to execute on the previous array.						*/
+/*	- If the array is valid, the checker will start to read STDIN for the	*/
+/*	  instructions to sort the previous array.								*/
 /*	- Prints OK if the instructions correctly sorts the array.				*/
 /*	- Prints KO if the instructions doesn't sort the array.					*/
 /*	- Prints Error if the array or the instructions aren't valid.			*/
@@ -144,6 +163,9 @@ int	main(int argc, char **argv)
 	if (!stacks || !order_lst)
 		return (ft_forcend(ptr, stacks, order_lst));
 	ft_verify_solution(stacks, order_lst);
+	if (stacks[1])
+		while (stacks[1])
+			ft_execute(PA_ORDER, stacks);
 	ft_stack_free(ptr, stacks);
 	ft_split_free(order_lst);
 	return (0);
