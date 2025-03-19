@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 16:44:05 by sscheini          #+#    #+#             */
-/*   Updated: 2025/01/09 20:57:43 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/19 19:44:34 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@ char		*ft_ptrdup(void *ptr, int spf);
 /* Writes the formatted output to stdout.									*/
 int			ft_printf(char const *txt, ...);
 
-/* Writes the formatted output to the fd specified as argument.					*/
+/* Writes the formatted output to the fd specified as argument.				*/
 int			ft_printfd(int fd, char const *txt, ...);
 #endif

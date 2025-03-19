@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:46:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/17 16:24:54 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:04:07 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	*ft_stack_free(int *ptr, t_list **stacks);
 void	*ft_split_free(char **split);
 
 /*	Push_swap failsafe.														*/
-int		ft_forcend(int *ptr, t_list **stacks, char **order_arr);
+int		ft_forcend(int *ptr, t_list **stacks, char **order_lst);
 
 /*--------------------------------------------------------------------------*/
 /*-------------------------------INSTRUCTIONS-------------------------------*/

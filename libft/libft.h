@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:37:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/17 16:22:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:51:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,9 @@ char	*ft_strtrim(char const *s1, char const *set);
 
 /* Returns a CHAR * with the result of concatenate 's1' and 's2'.			*/
 char	*ft_strjoin(char const *s1, char const *s2);
+
+/* Returns a char * with the next line on the file descriptor given.	*/
+char	*get_next_line(int fd);
 
 /* Creates and returns a CHAR * that includes every content included in the */
 /* arguments **ARGV, but as a single string instead.						*/

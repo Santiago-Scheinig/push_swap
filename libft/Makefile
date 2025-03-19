@@ -83,7 +83,7 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 #
 $(NAME): $(OBJDIR) $(OBJ)
 	@echo "\e[0;32m"
-	@ar rcs $(NAME) $(OBJ) $(LIBDIR)
+	@ar rcs $(NAME) $(OBJ)
 	@echo "\e[0;32m $@ linked.\n"
 #
 #- Removes every object inside $(OBJDIR) and the directory itself.					  -#
