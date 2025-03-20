@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:33:40 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/17 16:24:32 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:09:55 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,9 +156,10 @@ void	ft_mergesort(t_list **stacks, char **order_lst, t_pair *run)
 		ft_getin_pos(stacks, order_lst, run);
 	if (run->a == run->b)
 	{
+		order = ft_mergepair(stacks[1], stacks[0], run->a, run->b);
 		while (stacks[1]->run == run->a)
-			if (ft_execute(PA_ORDER, stacks))
-				ft_printf("%s\n", order_lst[PA_ORDER]);
+			if (ft_execute(order, stacks))
+				ft_printf("%s\n", order_lst[order]);
 		return ;
 	}
 	next = *(ft_limitchr(stacks[1], run->a, 1)->content);

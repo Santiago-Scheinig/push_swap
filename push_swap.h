@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:46:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/17 18:04:07 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:12:11 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ void	ft_timsort(t_list **stacks, char **order_lst);
 /*	|-|																		*/
 /*	- For T_LIST * of size > 3, it will only sort the first two				*/
 /*	  numbers of the indicated stack.										*/
-void	ft_bubblesort(t_list **stacks, char **order_lst, int col, int dir);
+void	ft_bubblesort(t_list **stacks, char **order_lst);
 
 /*	Returns the order needed to sort the nbr sent as argument into it's		*/
 /*	correct position in the destination stack, with an order efficiency of:	*/

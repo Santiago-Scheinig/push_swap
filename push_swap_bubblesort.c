@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:45:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/17 16:24:10 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:21:30 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,34 +74,52 @@ static int	ft_minmax_orders(t_list *stack)
 	return (NO_ORDER);
 }
 
-/*	Executes up to three instructions to sort an individual stack of a		*/
-/*	numeric T_LIST ** with an order efficiency of: O(n).					*/
-/*  - Use column to indicate which stack to sort:							*/
-/*	|| STACK A == 0															*/
-/*	|| STACK B == 1															*/
-/*	- Use direction < 0, to indicate a minimum to maximum sort. 			*/
-/*	- Use direction >= 0, to indicate a maximum to minimum sort. 			*/
-/*																			*/
+static void	ft_solve(t_list **stacks, char **order_lst)
+{
+	t_pair order;
+	
+	order.a = ft_minmax_orders(stacks[0]);
+	order.b = ft_translate(ft_maxmin_orders(stacks[1]));
+	if (order.a == order.b - 3)
+	{
+		order.b += 3;
+		order.a = NO_ORDER;
+	}
+	if (ft_execute(order.a, stacks))
+		ft_printf("%s\n", order_lst[order.a]);
+	if (ft_execute(order.b, stacks))
+		ft_printf("%s\n", order_lst[order.b]);
+}
+/*	Executes instructions to sort an individual stack of a numeric 			*/ 
+/*	T_LIST ** with an order efficiency of: O(n).							*/
 /*	NOTICE 																	*/
 /*	|-|																		*/
-/*	- For T_LIST * of size > 3, it will only sort the first two				*/
-/*	  numbers of the indicated stack.										*/
-void	ft_bubblesort(t_list **stacks, char **order_lst, int col, int dir)
+/*	- For T_LIST * of size > 6, it will only sort the first two				*/
+/*	  numbers of both stacks.												*/
+void	ft_bubblesort(t_list **stacks, char **order_lst)
 {
-	int	order;
-	int	count;
+	t_pair	run;
+	int		lstsize;
 
-	count = -1;
-	while (++count < 3)
+	lstsize = ft_lstsize(stacks[0]);
+	if (lstsize <= 6)
 	{
-		order = NO_ORDER;
-		if (dir < 0)
-			order = ft_minmax_orders(stacks[col]);
-		if (dir >= 0)
-			order = ft_maxmin_orders(stacks[col]);
-		if (col)
-			order = ft_translate(order);
-		if (ft_execute(order, stacks))
-			ft_printf("%s\n", order_lst[order]);
+		while (lstsize-- > 3)
+		{
+			stacks[0]->run = 0;
+			if (ft_execute(PB_ORDER, stacks))
+				ft_printf("%s\n", order_lst[PB_ORDER]);
+		}
+		while (ft_checksort_lst(stacks[0], -1) 
+			|| ft_checksort_lst(stacks[1], 1))
+			ft_solve(stacks, order_lst);
+		run.a = 0;
+		run.b = 0;
+		ft_mergesort(stacks, order_lst, &run);
+		while (ft_checksort_lst(stacks[0], -1))
+			if (ft_execute(RRA_ORDER, stacks))
+				ft_printf("%s\n", order_lst[RRA_ORDER]);
 	}
+	else
+		ft_solve(stacks, order_lst);
 }

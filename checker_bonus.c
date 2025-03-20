@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:35:51 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/19 20:42:56 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:07:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static void	ft_verify_solution(t_list **stacks, char **order_lst)
 	{
 		if (!ft_execute(ft_translate_order(order_lst[i]), stacks))
 		{
-			ft_printfd(STDERR_FILENO, "Error");
+			ft_printfd(STDERR_FILENO, "Error\n");
 			return ;
 		}
 	}
