@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:45:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/20 15:40:06 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:40:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ static void	ft_solve(t_list **stacks, char **order_lst)
 	if (ft_execute(order.b, stacks))
 		ft_printf("%s\n", order_lst[order.b]);
 }
+
 /*	Executes instructions to sort an individual stack of a numeric 			*/ 
 /*	T_LIST ** with an order efficiency of: O(n).							*/
 /*	NOTICE 																	*/
