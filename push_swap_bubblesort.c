@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:45:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/20 15:21:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:40:06 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ void	ft_bubblesort(t_list **stacks, char **order_lst)
 			ft_solve(stacks, order_lst);
 		run.a = 0;
 		run.b = 0;
-		ft_mergesort(stacks, order_lst, &run);
+		if (stacks[1])
+			ft_mergesort(stacks, order_lst, &run);
 		while (ft_checksort_lst(stacks[0], -1))
 			if (ft_execute(RRA_ORDER, stacks))
 				ft_printf("%s\n", order_lst[RRA_ORDER]);
