@@ -1,4 +1,4 @@
-#----------	Makefile Library -- All the following variables can be edited. ----------#
+# --------------------------------- Makefile Main ---------------------------------- #
 
 MAIN	=	$(SRCDIR)push_swap.c
 
@@ -28,62 +28,83 @@ BONUS	=	checker
 CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror
 
-#---------- Edit the following if: IFLAGS added or no sub-makefile needed. ----------#
+# --------------------------- Makefile Object Compilation -------------------------- #
 
 OBJ		=	$(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
 MOBJ	=	$(MAIN:$(SRCDIR)%.c=$(OBJDIR)%.o)
 BOBJ	=	$(BSRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
 
-.PHONY: all clean fclean re
+# ------------------------------- Makefile Cosmetics ------------------------------- #
+
+COLOUR_GREEN	=	\033[0;32m
+COLOUR_RED		=	\033[0;31m
+COLOUR_CIAN		=	\033[0;35m
+COLOUR_BLUE		=	\033[0;34m
+COLOUR_END		=	\033[0m
+
+# --------------------------------- Makefile Body ---------------------------------- #
+
+.PHONY: all msg clear clean fclean re
 
 all: $(NAME)
 
 #- Creates the libft.a library.														-#
 $(LIBFT):
-	@echo "\e[0;32mBuilding libft.a in $(MAKENM)...\n"
+	@echo "$(COLOUR_GREEN)Push_swap - Libft compilation.\n$(COLOUR_END)"
+	@echo "$(COLOUR_BLUE)#--------------------------------------------------#\n"
 	@make -s -C $(MAKENM)
+	@echo "$(COLOUR_BLUE)\n#--------------------------------------------------#\n"
+	@echo "$(COLOUR_GREEN)Push_swap - Libft initialized.$(COLOUR_END)"
 
 #- Creates the program library with all the objects minus the main object			-# 
-$(LIBEXE): $(LIBFT) $(OBJDIR) $(OBJ)
-	@echo "\e[0;32m"
+$(LIBEXE): $(LIBFT) $(OBJDIR) $(OBJ) $(MOBJ)
+	@echo -n "$(COLOUR_GREEN)"
 	@cp $(MAKENM)/$(LIBFT) $(LIBEXE)
 	@ar rcs $(LIBEXE) $(OBJ)
-	@echo "\e[0;32m $@ linked.\n"
 
 #- Creates a directory named $(OBJDIR).												-#
 $(OBJDIR):
+	@echo "\n$(COLOUR_GREEN)Push_swap - Object compilation:\n$(COLOUR_END)"
 	@mkdir -p $@
 #
 #- Compiles each %(generic).c source into its respective %(generic).o				-#
 $(OBJDIR)%.o: $(SRCDIR)%.c
 	@$(CC) $(CFLAGS) -c $< -o $@
-	@echo "\e[0;35m -$@ created."
+	@echo "$(COLOUR_CIAN)\t-$@ created.$(COLOUR_END)"
 #
 #- Compiles the main object with the program library into the final executable.		-#
-$(NAME): $(LIBEXE) $(MOBJ)
-	@echo "\e[0;32m"
+$(NAME): $(LIBEXE)
 	@$(CC) $(CFLAGS) -o $(NAME) $(MOBJ) $(LIBEXE)
-	@echo "\e[0;32m $@ program ready.\n"
+	@echo "\n$(COLOUR_GREEN)Push_swap - Program ready.$(COLOUR_END)"
+#
+msg:
+	@echo "$(COLOUR_GREEN)\nChecker - Bonus program compilation.\n$(COLOUR_END)"
+	@echo "$(COLOUR_BLUE)#--------------------------------------------------#\n"
+#
+clear:
+	@clear
 #
 #- Compiles the bonus objects and the program library into the bonus executable.	-#
-bonus: $(NAME) $(BOBJ)
-	@echo "\e[0;32m"
+bonus: $(NAME) msg $(BOBJ)
 	@$(CC) $(CFLAGS) -o $(BONUS) $(BOBJ) $(LIBEXE)
-	@echo "\e[0;32m $@ program ready.\n"
+	@echo "$(COLOUR_BLUE)\n#--------------------------------------------------#\n"
+	@echo "$(COLOUR_GREEN)Checker - Bonus program ready.$(COLOUR_END)"
 #
 #- Removes every object inside $(OBJDIR) and the directory itself.					-#
 clean:
-	@rm -rf $(OBJDIR)
 	@make clean -s -C $(MAKENM)
-	@echo "\e[0;32m Cleaning complete."
+	@rm -rf $(OBJDIR)
+	@echo "$(COLOUR_RED)Push_swap - Object cleaning complete.\n$(COLOUR_END)"
 #
 #- Removes the final files made with this makefile, executing clean as well.		-#
-fclean: clean
+fclean:
+	@make fclean -s -C $(MAKENM)
+	@rm -rf $(OBJDIR)
+	@echo "$(COLOUR_RED)Push_swap - Object cleaning complete.\n$(COLOUR_END)"
 	@rm -f $(NAME)
 	@rm -f $(BONUS)
 	@rm -f $(LIBEXE)
-	@make fclean -s -C $(MAKENM)
-	@echo "\e[0;32m Files removed."
+	@echo "$(COLOUR_RED)Push_swap - Files removed.\n$(COLOUR_END)"
 #
 #- Restarts the Makefile. Erases everything to default, and executes again.			-#
-re: fclean all
+re: clear fclean all
