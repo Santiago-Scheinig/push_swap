@@ -16,7 +16,7 @@ SRC		=	$(SRCDIR)push_swap_utils.c 				\
 BSRC	=	$(SRCDIR)checker_bonus.c
 
 SRCDIR	=	./
-OBJDIR	=	obj./
+OBJDIR	=	obj/
 MAKENM	=	libft
 
 LIBFT	=	libft.a
